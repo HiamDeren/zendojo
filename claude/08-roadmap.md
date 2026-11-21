@@ -149,6 +149,23 @@ Thực tế: `production` vẫn ở PR #3 (2026-11-18); toàn bộ dashboard đ�
 - [ ] Deren test thẻ Log phiên trên Preview.
 - [ ] Nhập `cb-log` cũ: Deren bấm "Copy CSV" ở tab Log của artifact, gửi CSV → Claude nhập bằng SQL (dòng có R tạo một lệnh với setup tương ứng).
 
+## UI v3 (canvas `docs/design/v3/`, nhánh `feat/ui-v3`, D59–D61)
+- [x] G1 hệ thống UI dùng chung (`_components/kit`, quy cách card / seg / chip / pill / tag / bảng / lưới trong `desk.css`).
+- [x] G2 shell: sidebar IA mới, topbar 64 px, tab bar mobile, palette.
+- [x] G3 Dashboard: timeline phiên 5 mốc, Plan hôm nay (dải HVN, kịch bản A / B, checklist 10:00), Kỷ luật phiên, Tin hôm nay, Journal 5 phiên, Earnings tuần, Tin nổi bật; bỏ Watchlist.
+- [x] G4 Markets đa tài sản qua ETF (`lib/markets/provider.ts`).
+- [x] G5 Journal: tab Nhật ký / PnL & lịch / Thống kê, lịch mini, chip, Lưu ở PageHead; PnL 6 thẻ + đường vốn + expectancy theo setup.
+- [x] G6 Trade Plan render server + drawer Gửi JSON tay.
+- [x] G7 News (Tất cả / Theo dõi), Earnings, Econ Calendar dùng PageHead v3.
+- [x] G8 Knowledge hub (Tiếp tục học, Trắc nghiệm) + kiểm kê `claude/11-knowledge-migration.md`.
+- [ ] **[CẦN XÁC NHẬN] Nguồn futures / hàng hoá / FX / chỉ số ngoài Mỹ** cho Markets (thay ETF): (1) Polygon.io / Massive — gói trả phí có futures + FX, free chỉ cổ phiếu trễ; (2) Twelve Data — free 800 lệnh / ngày có FX + chỉ số, futures cần gói trả phí; (3) Databento — futures CME chất lượng cao, trả theo dung lượng (lưu ý điều khoản dữ liệu CME chỉ dùng cá nhân). Deren chọn rồi mới thêm key.
+- [ ] Đặt `dailyLossLimit`, `trailingDrawdown` trong `lib/settings.ts` theo luật tài khoản prop (thẻ Kỷ luật phiên đang "chưa đặt").
+- [ ] News › Đã lưu: duyệt migration nháp `supabase/drafts/20261121_news_saved.sql` rồi làm API + nút lưu.
+- [ ] Knowledge native (D61): duyệt kế hoạch trong `claude/11-knowledge-migration.md`, chuyển từng khoá (Plan → Quiz → Tools → Level), trang bài 3 cột theo `Lesson.dc.html`.
+- [ ] News 3 cột đầy đủ theo `News.dc.html` (rail chủ đề có số đếm, nguồn; pill mã kèm %; tin trước / sau), Earnings (chip NQ top / S&P 500 lớn / Đang theo dõi, cột tổng tuần, biến động kỳ vọng), Econ (dải 5 ngày, bảng tuần cột ET / VN / tác động 3 vạch, panel chi tiết + đếm ngược) — hiện mới đổi PageHead + quy cách v3, bố cục bên trong giữ bản trước.
+- [ ] Lighthouse mobile `/dashboard`, `/markets`, `/knowledge` trên Preview (cần đăng nhập).
+- [ ] Màu ảnh plan / embed Discord đồng bộ theme (cần sửa plan-core + snapshot).
+
 ## Tối ưu 2026-11 (audit `claude/11-audit-2026-11.md`, nhánh `chore/optimize-2026-11`)
 - [x] Hạng 1–14 của audit (2026-11-21): CI, timeout + retry 429 + giới hạn đồng thời API ngoài, `cache()` kiểm đăng nhập, layout desk song song, `next/font`, security headers + CSP Report-Only, `timingSafeEqual` + helper `lib/api.ts`, lỗi `{ ok:false, error, code }`, zod (`lib/schemas.ts`), kiểm Origin, Biome, dọn export chết.
 - [ ] Deren review + merge PR `chore/optimize-2026-11` → `development`; test Preview: đăng nhập, Journal lưu / ảnh, Trade Plan gửi JSON (`notify:false`), `/stock/[mã]` (TradingView), `/knowledge` (iframe).

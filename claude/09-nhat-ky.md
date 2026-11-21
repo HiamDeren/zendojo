@@ -2,6 +2,16 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-21 · UI v3 (nhánh `feat/ui-v3`)
+- Bản thiết kế chép từ canvas vào `docs/design/v3/` (11 bảng). D59 IA mới, D60 Markets đa tài sản qua ETF, D61 Knowledge native.
+- Shell: sidebar Dashboard riêng + Thị trường / Giao dịch / Học / Sắp có, PnL vào Journal; topbar breadcrumb + ⌘K + tin đỏ + đồng hồ NY / VN + tên phiên; tab bar mobile mới.
+- Dashboard: SessionTimeline (dải phiên, chấm tin, vạch now, 5 mốc), Plan hôm nay (thang level + dải HVN + vạch 9:29, kịch bản A / B từ summary, Checklist10 localStorage theo ngày), Kỷ luật phiên (SETTINGS.dailyLossLimit / trailingDrawdown = null → "chưa đặt"), Tin hôm nay + dải tuần + nghỉ lễ, Journal 5 phiên (cột PnL), Earnings tuần, Tin nổi bật. Bỏ Watchlist.
+- Markets: 6 tab; Tổng quan = phiên Tokyo / London / NY, hiệu suất liên thị trường (DivergingBar), 4 thẻ nhóm, heatmap S&P 500 / NQ 100 + biến động mạnh, chỉ số toàn cầu. Giá qua ETF đại diện (`lib/markets/provider.ts`), chỉ 1D.
+- Journal: layout có PageHead + tab; `/journal/stats` mới; lịch mini; chip cho lựa chọn ≤ 6; nút Lưu ⌘S portal lên PageHead; PnL 6 thẻ (net, win rate, expectancy, profit factor, R TB thắng / thua, max DD) + đường vốn + expectancy theo setup (`tradeStats`, có test).
+- Trade Plan: server render ảnh + bảng level + Bias + kịch bản + checklist + lịch sử; Gửi JSON tay trong `<dialog>`.
+- News: seg Tất cả / Theo dõi (lọc mã NQ top) / Đã lưu (chờ migration nháp). Earnings, Econ Calendar: PageHead v3. Knowledge: hub v3 + kiểm kê.
+- Kiểm: `tsc`, `biome ci`, Vitest 59 test, `check-plan-core`, `next build` pass; xem bằng trình duyệt với mock (Dashboard, Markets, Journal 3 tab, Trade Plan + drawer).
+
 ## 2026-11-21 · Tối ưu giao diện (nhóm A tốc độ cảm nhận + nhóm B a11y, theme theo brand kit)
 - A: `app/(desk)/loading.tsx` (skeleton, `_components/Skeleton.tsx`) + `error.tsx` (tiếng Việt, nút Thử lại, chỉ hiện digest). Dashboard tách watchlist / earnings tuần / news thành `dashboard/MarketCards.tsx` bọc `<Suspense>`; News đọc bài trong Suspense; Markets stream phần dữ liệu; Journal tải ảnh song song; Trade Plan nạp sẵn lịch sử tháng ở server. Page journal / PnL / Trade Plan gọi `requireOwner` trước khi đọc DB.
 - Đo local (mock Finnhub chậm 2 s): Dashboard byte đầu 0,25 s (trước chờ hết ~2,3 s), Markets 0,04 s (trước ~8 s). Xem bằng trình duyệt: Dashboard / Journal / Trade Plan / Markets đúng, không lỗi console, 390 px không tràn ngang.
