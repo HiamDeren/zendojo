@@ -970,3 +970,13 @@ a.drow:hover, button.drow:hover, .drow.hover:hover { background: var(--panel-2);
 .equity .eq-zero { stroke: var(--line-3); stroke-dasharray: 3 4; vector-effect: non-scaling-stroke; }
 .stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
 @media (max-width: 1100px) { .stats-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Trade Plan v3 */
+.drawer { margin: 0 0 0 auto; height: 100dvh; max-height: 100dvh; width: min(560px, 100vw); padding: 0; border: 0; border-left: 1px solid var(--line); background: var(--bg); color: var(--text); }
+.drawer::backdrop { background: rgba(0, 0, 0, .55); }
+.drawer-in { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.bias-big { font-size: 30px; font-weight: 700; letter-spacing: -.02em; }
+.bias-big.long { color: var(--long); } .bias-big.short { color: var(--short); } .bias-big.flat { color: var(--text-2); }
+.bias-cells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.bias-cells > div { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 10px; background: var(--side); border: 1px solid var(--line); font-size: 13px; min-width: 0; }
+.tbl tr.row-price td { background: var(--accent-soft); color: var(--accent-hi); }
