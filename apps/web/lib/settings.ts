@@ -3,6 +3,10 @@ export const SETTINGS = {
   symbol: "NQ",
 
   maxTradesPerDay: 3,
+  // Kỷ luật phiên (Dashboard, UI v3). null = chưa đặt → thẻ hiện "chưa đặt". Đơn vị USD, theo luật tài khoản prop.
+  dailyLossLimit: null as number | null,
+  trailingDrawdown: null as number | null,
+  stopAfterLosses: 2, // dừng sau n lệnh thua liên tiếp (quy trình trade, chương 05 Trade Plan)
   planSend: "09:29 ET · 21:29 VN",
   displayTz: "ET + VN",
   language: "Tiếng Việt",

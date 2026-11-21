@@ -14,7 +14,8 @@ export type PlanRow = {
 
 export type Level = { name: string; px: number; kind: "comp" | "prth" | "ovn" | "poc" | "hvn" | "target" | "price" };
 
-export type PlanView = PlanRow & { imageUrl: string | null; levels: Level[]; bias: "long" | "short" | "flat" };
+export type Zone = { lo: number; hi: number };
+export type PlanView = PlanRow & { imageUrl: string | null; levels: Level[]; zones: Zone[]; bias: "long" | "short" | "flat" };
 
 export async function getPlan(date: string): Promise<PlanRow | null> {
   const rows = await db.select<PlanRow>(
@@ -57,11 +58,22 @@ function levelsOf(payload: unknown): Level[] {
   }
 }
 
+// Vùng HVN (composite) plan-core tìm được, để tô dải trên thang level
+function zonesOf(payload: unknown): Zone[] {
+  try {
+    const p = core.planFromJson(payload);
+    return p.error || !p.D ? [] : (p.D.zones || []).map((z) => ({ lo: z.lo, hi: z.hi }));
+  } catch {
+    return [];
+  }
+}
+
 export async function planView(row: PlanRow): Promise<PlanView> {
   return {
     ...row,
     imageUrl: row.image_path ? await signedUrl(row.image_path) : null,
     levels: levelsOf(row.payload),
+    zones: zonesOf(row.payload),
     bias: biasTone(row.summary?.bias),
   };
 }
