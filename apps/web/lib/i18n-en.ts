@@ -737,6 +737,13 @@ const EN: Record<string, string> = {
   Anh: "UK",
   Pháp: "France",
   "VIX futures ngắn hạn": "Short-term VIX futures",
+  // UI v3 · Knowledge
+  "Tiếp tục học": "Continue learning",
+  "Bắt đầu với TPO Level · Tổng quan": "Start with TPO Level · Overview",
+  "Học tiếp": "Continue",
+  "Bắt đầu": "Start",
+  "Lộ trình AMT → Context → Entry, khoá học, trắc nghiệm": "AMT → Context → Entry path, courses, quizzes",
+  "Thuật ngữ orderflow & TPO": "Orderflow & TPO glossary",
   // UI v3 · News / Earnings / Econ
   "Lịch tin kinh tế tuần này, giờ ET và giờ hiển thị": "This week's economic calendar, in ET and your display time",
   "Lịch báo cáo kết quả kinh doanh, ưu tiên mã ảnh hưởng NQ": "Earnings calendar, focused on NQ-moving names",
