@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { DayWithTrades, Trade } from "@/lib/journal";
 import { BIAS_CHECK, DAY_TYPES, FOLLOWED, OPEN_TYPES, RESULTS, SETUPS, SIDES } from "@/lib/settings";
 import { useUi } from "../_components/Ui";
@@ -166,18 +167,59 @@ export default function JournalEditor({
     if (!saving) save();
   };
 
-  const sel = (k: string, label: string, opts: readonly string[]) => (
-    <label className="field">
-      {t(label)}
-      <select value={day[k]} onChange={(e) => set(k, e.target.value)}>
-        <option value="">—</option>
-        {opts.map((o) => (
-          <option key={o} value={o}>
-            {t(o)}
-          </option>
-        ))}
-      </select>
-    </label>
+  // Lựa chọn ≤ 6: chip (bấm lại để bỏ chọn); nhiều hơn: select
+  const choice = (k: string, label: string, opts: readonly (readonly [string, string])[], disabled = false) =>
+    opts.length <= 6 ? (
+      <fieldset className="field chip-field" key={k} disabled={disabled}>
+        <legend>{t(label)}</legend>
+        <div className="chips">
+          {opts.map(([v, n]) => (
+            <button key={v} type="button" className="chip" aria-pressed={day[k] === v} onClick={() => set(k, day[k] === v ? "" : v)}>
+              {t(n)}
+            </button>
+          ))}
+        </div>
+      </fieldset>
+    ) : (
+      <label className="field" key={k}>
+        {t(label)}
+        <select value={day[k]} onChange={(e) => set(k, e.target.value)} disabled={disabled}>
+          <option value="">—</option>
+          {opts.map(([v, n]) => (
+            <option key={v} value={v}>
+              {t(n)}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  const sel = (k: string, label: string, opts: readonly string[]) =>
+    choice(
+      k,
+      label,
+      opts.map((o) => [o, o] as const),
+    );
+
+  // Nút Lưu nằm ở PageHead của layout (#journal-actions); chưa có chỗ (SSR) thì hiện trong thẻ đầu
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => setSlot(document.getElementById("journal-actions")), []);
+  const saveBox = (
+    <div className="hstack journal-save">
+      <span role="status" className={msg ? (msg.ok ? "long small" : "short small") : dirty ? "small accent" : "small dim"}>
+        {msg && !dirty
+          ? msg.text
+          : dirty
+            ? t("Chưa lưu")
+            : initial?.updated_at
+              ? t("Lưu lần cuối {d}", {
+                  d: new Date(initial.updated_at).toLocaleString(lang === "en" ? "en-GB" : "vi-VN", { dateStyle: "short", timeStyle: "short" }),
+                })
+              : t("Chưa lưu")}
+      </span>
+      <button type="button" className="btn primary" onClick={save} disabled={saving} title="Ctrl / ⌘ + S">
+        {saving ? t("Đang lưu…") : t("Lưu journal")} <kbd className="mono kbd-in">⌘S</kbd>
+      </button>
+    </div>
   );
 
   return (
@@ -185,24 +227,9 @@ export default function JournalEditor({
       <div className="card journal-head">
         <div className="row wrap" style={{ gap: 12 }}>
           {head}
-          <div className="hstack journal-save">
-            <span role="status" className={msg ? (msg.ok ? "long small" : "short small") : dirty ? "small accent" : "small dim"}>
-              {msg && !dirty
-                ? msg.text
-                : dirty
-                  ? t("Có thay đổi chưa lưu")
-                  : initial?.updated_at
-                    ? t("Lưu lần cuối {d}", {
-                        d: new Date(initial.updated_at).toLocaleString(lang === "en" ? "en-GB" : "vi-VN", { dateStyle: "short", timeStyle: "short" }),
-                      })
-                    : t("Chưa lưu")}
-            </span>
-            <button type="button" className="btn primary" onClick={save} disabled={saving} title="Ctrl + S">
-              {saving ? t("Đang lưu…") : t("Lưu journal")}
-            </button>
-          </div>
+          {slot ? createPortal(saveBox, slot) : saveBox}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12 }}>
+        <div className="choice-grid">
           {sel("day_type", "Day type", DAY_TYPES)}
           {sel("result", "Kết quả", RESULTS)}
           {sel("open_type", "Open type", OPEN_TYPES)}
@@ -213,22 +240,10 @@ export default function JournalEditor({
       <section className="card" aria-label={t("Log phiên")}>
         <div className="row wrap">
           <span className="lbl">{t("Log phiên · Composite × pRTH × OVN")}</span>
-          {fromPlan && <span className="small dim">{t("Khung trước phiên điền sẵn từ plan, kiểm lại rồi lưu.")}</span>}
+          {fromPlan && <span className="tag acc">{t("Điền sẵn từ plan")}</span>}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 12 }}>
-          {sessionFields.map(([k, label, opts]) => (
-            <label className="field" key={k}>
-              {t(label)}
-              <select value={day[k]} onChange={(e) => set(k, e.target.value)} disabled={k === "open_dir" && day.open_type === "Open auction"}>
-                <option value="">—</option>
-                {opts.map(([v, n]) => (
-                  <option key={v} value={v}>
-                    {t(n)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ))}
+        <div className="choice-grid">
+          {sessionFields.map(([k, label, opts]) => choice(k, label, opts, k === "open_dir" && day.open_type === "Open auction"))}
         </div>
       </section>
 

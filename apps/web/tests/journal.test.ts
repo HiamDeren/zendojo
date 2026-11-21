@@ -1,6 +1,6 @@
 // Journal: chuẩn hoá dữ liệu trước khi gọi save_journal và thống kê (Wilson 95%). Không gọi database.
 import { describe, expect, it } from "vitest";
-import { type DayWithTrades, dayNet, mistakesOf, normDay, normTrade, presetFromPlan, rate, statsOf } from "@/lib/journal";
+import { type DayWithTrades, dayNet, mistakesOf, normDay, normTrade, presetFromPlan, rate, statsOf, tradeStats } from "@/lib/journal";
 
 describe("journal · normTrade", () => {
   it("giá trị lạ → mặc định an toàn", () => {
@@ -100,4 +100,57 @@ describe("journal · dayNet / statsOf", () => {
 describe("journal · presetFromPlan", () => {
   it("không có plan → rỗng", () => expect(presetFromPlan(null)).toEqual({}));
   it("bias ngoài danh sách → chuỗi rỗng", () => expect(presetFromPlan({ bias: "???" }).pre_bias).toBe(""));
+});
+
+describe("journal · tradeStats (PnL & lịch)", () => {
+  const mk = (d: string, trades: [number, number, string][]) =>
+    ({
+      trade_date: d,
+      symbol: "NQ",
+      day_type: null,
+      result: null,
+      open_type: null,
+      bias_correct: null,
+      journal_trades: trades.map(([pnl, r, setup], i) => ({
+        seq: i + 1,
+        entry_time: null,
+        side: "Long",
+        qty: 1,
+        setup,
+        level: null,
+        trigger: null,
+        r,
+        pnl,
+        fee: 5,
+        followed_plan: null,
+        mistakes: [],
+      })),
+    }) as unknown as DayWithTrades;
+
+  it("win rate, expectancy, profit factor, R TB, max DD theo thứ tự ngày", () => {
+    const s = tradeStats([
+      mk("2026-11-03", [[-205, -1, "C"]]),
+      mk("2026-11-02", [
+        [405, 2, "F"],
+        [105, 0.5, "F"],
+      ]),
+    ]);
+    expect(s.trades).toBe(3);
+    expect(s.net).toBe(290);
+    expect(s.winRate).toBe(67);
+    expect(s.expectancy).toBeCloseTo(96.67, 1);
+    expect(s.profitFactor).toBeCloseTo(500 / 210, 5);
+    expect(s.avgWinR).toBe(1.25);
+    expect(s.avgLossR).toBe(-1);
+    expect(s.equity).toEqual([
+      { date: "2026-11-02", cum: 500 },
+      { date: "2026-11-03", cum: 290 },
+    ]);
+    expect(s.maxDD).toBe(210);
+    expect(s.bySetup.find((x) => x.key === "F")).toMatchObject({ n: 2, expR: 1.25, net: 500 });
+  });
+
+  it("không có lệnh → null, không chia cho 0", () => {
+    expect(tradeStats([])).toMatchObject({ trades: 0, winRate: null, expectancy: null, profitFactor: null, maxDD: 0 });
+  });
 });
