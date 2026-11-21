@@ -737,6 +737,14 @@ const EN: Record<string, string> = {
   Anh: "UK",
   Pháp: "France",
   "VIX futures ngắn hạn": "Short-term VIX futures",
+  // UI v3 · News / Earnings / Econ
+  "Lịch tin kinh tế tuần này, giờ ET và giờ hiển thị": "This week's economic calendar, in ET and your display time",
+  "Lịch báo cáo kết quả kinh doanh, ưu tiên mã ảnh hưởng NQ": "Earnings calendar, focused on NQ-moving names",
+  "Tin thị trường Mỹ, đọc ngay trong ZenDojo": "US market news, read right inside ZenDojo",
+  "Phạm vi tin": "News scope",
+  "Theo dõi": "Watchlist",
+  "Cần bảng lưu tin mới (migration nháp, chờ duyệt)": "Needs a new saved-news table (draft migration, pending approval)",
+  "Đã lưu": "Saved",
   // UI v3 · Trade Plan
   "Gửi JSON tay": "Send JSON manually",
   "Chọn ngày": "Pick a day",

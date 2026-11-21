@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PageHead } from "../_components/kit";
 import { NQ_WATCH, getEarnings } from "@/lib/market";
 import { getT } from "@/lib/prefs-server";
 import { DATE_RE, MONTH_RE, addDays, etNow, monthRange, shiftMonth } from "@/lib/time";
@@ -23,26 +24,27 @@ export default async function EarningsPage({ searchParams }: { searchParams: Pro
   const initialDay = pick && pick.startsWith(month) ? pick : today.startsWith(month) ? today : "";
   return (
     <>
-      <header className="page-head">
-        <div>
-          <span className="lbl">{t("Thị trường")}</span>
-          <h1 className="h1">Earnings</h1>
-        </div>
-        <div className="hstack" style={{ gap: 6 }}>
-          <Link className="btn icon" aria-label={t("Tháng trước")} href={`/earnings?month=${shiftMonth(month, -1)}`}>
-            ‹
-          </Link>
-          <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
-          <Link className="btn icon" aria-label={t("Tháng sau")} href={`/earnings?month=${shiftMonth(month, 1)}`}>
-            ›
-          </Link>
-          {today.slice(0, 7) !== month && (
-            <Link className="btn sm" href="/earnings">
-              {t("Tháng này")}
+      <PageHead
+        kicker={t("Thị trường")}
+        title="Earnings"
+        sub={t("Lịch báo cáo kết quả kinh doanh, ưu tiên mã ảnh hưởng NQ")}
+        actions={
+          <div className="hstack" style={{ gap: 6 }}>
+            <Link className="btn icon" aria-label={t("Tháng trước")} href={`/earnings?month=${shiftMonth(month, -1)}`}>
+              ‹
             </Link>
-          )}
-        </div>
-      </header>
+            <span style={{ fontSize: 14, fontWeight: 600, minWidth: 120, textAlign: "center" }}>{t("Tháng {m} · {y}", { m: Number(mo), y })}</span>
+            <Link className="btn icon" aria-label={t("Tháng sau")} href={`/earnings?month=${shiftMonth(month, 1)}`}>
+              ›
+            </Link>
+            {today.slice(0, 7) !== month && (
+              <Link className="btn sm" href="/earnings">
+                {t("Tháng này")}
+              </Link>
+            )}
+          </div>
+        }
+      />
       {!res.configured ? (
         <NotConfigured what="Earnings" />
       ) : !res.ok ? (

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { NEWS_CATEGORIES, getCompanyNews, getNews, type NewsCategory, type NewsItem } from "@/lib/market";
+import { getCompanyNews, getNews, NEWS_CATEGORIES, type NewsCategory, type NewsItem, NQ_WATCH } from "@/lib/market";
 import { SYMBOL_RE } from "@/lib/stock";
 import { getT } from "@/lib/prefs-server";
 import { readArticle } from "@/lib/reader";
 import Icon from "../_components/Icon";
+import { PageHead } from "../_components/kit";
 import { SkelLine } from "../_components/Skeleton";
 import { NewsRow } from "../_components/MarketBits";
 import { NotConfigured } from "../_components/States";
@@ -18,7 +19,7 @@ const STEP = 20;
 const WATCH = ["NVDA", "MSFT", "AAPL", "AMZN", "META", "AVGO", "GOOGL", "TSLA"];
 const MAX = 100;
 
-export default async function NewsPage({ searchParams }: { searchParams: Promise<{ cat?: string; id?: string; n?: string; sym?: string }> }) {
+export default async function NewsPage({ searchParams }: { searchParams: Promise<{ cat?: string; id?: string; n?: string; sym?: string; view?: string }> }) {
   const sp = await searchParams;
   const sym = sp.sym && SYMBOL_RE.test(sp.sym.toUpperCase()) ? sp.sym.toUpperCase() : "";
   const category = (NEWS_CATEGORIES as readonly string[]).includes(sp.cat || "") ? (sp.cat as NewsCategory) : "general";
@@ -26,39 +27,57 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
   const { t } = await getT();
   // Lấy đủ MAX một lần (cùng một lệnh Finnhub, đã cache 5 phút), chỉ hiện `count` bài
   const res = sym ? await getCompanyNews(sym, 14, MAX) : await getNews(category, MAX);
-  const shown = res.items.slice(0, count);
+  // Theo dõi: tin có mã thuộc nhóm NQ top (NQ_WATCH)
+  const view = sp.view === "watch" && !sym ? "watch" : "all";
+  const pool = view === "watch" ? res.items.filter((n) => n.related.split(",").some((x) => NQ_WATCH.includes(x.trim().toUpperCase()))) : res.items;
+  const shown = pool.slice(0, count);
   const now = Date.now();
   const q = (o: Record<string, string | number | undefined>) => {
     const p = new URLSearchParams();
     if (sym) p.set("sym", sym);
     else p.set("cat", category);
+    if (view === "watch") p.set("view", "watch");
     for (const [k, v] of Object.entries(o)) if (v !== undefined && v !== "") p.set(k, String(v));
     return `/news?${p.toString()}`;
   };
   const nParam = count > STEP ? count : undefined;
   // Chỉ đọc bài có trong danh sách vừa tải (không nhận URL tuỳ ý)
-  const sel: NewsItem | undefined = sp.id ? res.items.find((n) => n.id === sp.id) : undefined;
+  const sel: NewsItem | undefined = sp.id ? pool.find((n) => n.id === sp.id) : undefined;
 
   return (
     <>
-      <header className="page-head">
-        <div>
-          <span className="lbl">{t("Thị trường")}</span>
-          <h1 className="h1">News</h1>
-        </div>
-        {sym && (
-          <Link className="btn sm" href={`/stock/${sym}`}>
-            {t("Trang {s}", { s: sym })} ›
-          </Link>
-        )}
-      </header>
+      <PageHead
+        kicker={t("Thị trường")}
+        title="News"
+        sub={t("Tin thị trường Mỹ, đọc ngay trong ZenDojo")}
+        actions={
+          <>
+            <nav className="seg" aria-label={t("Phạm vi tin")}>
+              <Link href="/news" className={"seg-link" + (view === "all" && !sym ? " on" : "")} aria-current={view === "all" && !sym ? "page" : undefined}>
+                {t("Tất cả")}
+              </Link>
+              <Link href="/news?view=watch" className={"seg-link" + (view === "watch" ? " on" : "")} aria-current={view === "watch" ? "page" : undefined}>
+                {t("Theo dõi")}
+              </Link>
+              <span className="seg-link" aria-disabled="true" title={t("Cần bảng lưu tin mới (migration nháp, chờ duyệt)")} style={{ opacity: 0.45 }}>
+                {t("Đã lưu")}
+              </span>
+            </nav>
+            {sym && (
+              <Link className="btn sm" href={`/stock/${sym}`}>
+                {t("Trang {s}", { s: sym })} ›
+              </Link>
+            )}
+          </>
+        }
+      />
       {!res.configured ? (
         <NotConfigured what="News" />
       ) : !res.ok ? (
         <div className="notice">
           {t("Không tải được tin")}: {res.error}
         </div>
-      ) : !res.items.length ? (
+      ) : !pool.length ? (
         <p className="small dim">{t("Chưa có tin.")}</p>
       ) : (
         <div className={"news-split fit" + (sp.id ? " reading" : "")}>
@@ -89,9 +108,9 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
             {shown.map((n) => (
               <NewsRow key={n.id} n={n} now={now} href={q({ id: n.id, n: nParam })} active={n.id === sp.id} />
             ))}
-            {res.items.length > count && (
+            {pool.length > count && (
               <Link className="btn sm" style={{ alignSelf: "center", marginTop: 8 }} href={q({ n: count + STEP, id: sp.id })} scroll={false}>
-                {t("Tải thêm {n} bài", { n: Math.min(STEP, res.items.length - count) })}
+                {t("Tải thêm {n} bài", { n: Math.min(STEP, pool.length - count) })}
               </Link>
             )}
           </section>
