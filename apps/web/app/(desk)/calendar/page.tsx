@@ -4,6 +4,7 @@ import { PREFS_COOKIE, parsePrefs } from "@/lib/econ-prefs";
 import { ECON_SOURCE_PAGE, getEconWeek, localize } from "@/lib/econ";
 import { getT } from "@/lib/prefs-server";
 import { DATE_RE, fmtTime, nowIn } from "@/lib/time";
+import { PageHead } from "../_components/kit";
 import TzPicker from "../_components/TzPicker";
 import CalendarView from "./CalendarView";
 
@@ -23,21 +24,22 @@ export default async function CalendarPage({ searchParams }: { searchParams: Pro
 
   return (
     <>
-      <header className="page-head">
-        <div>
-          <span className="lbl">{t("Thị trường")}</span>
-          <h1 className="h1">Calendar</h1>
-        </div>
-        <span className="hstack small muted" style={{ gap: 10 }}>
-          <span className={"dot " + (econ.ok ? "ok" : "err")} aria-hidden="true" />
-          {econ.ok && Number.isFinite(fetched) && (
-            <span className="mono">
-              {t("Cập nhật")} {fmtTime(fetched, ui.tz, false)}
-            </span>
-          )}
-          <TzPicker />
-        </span>
-      </header>
+      <PageHead
+        kicker={t("Thị trường")}
+        title="Econ Calendar"
+        sub={t("Lịch tin kinh tế tuần này, giờ ET và giờ hiển thị")}
+        actions={
+          <span className="hstack small muted" style={{ gap: 10 }}>
+            <span className={"dot " + (econ.ok ? "ok" : "err")} aria-hidden="true" />
+            {econ.ok && Number.isFinite(fetched) && (
+              <span className="mono">
+                {t("Cập nhật")} {fmtTime(fetched, ui.tz, false)}
+              </span>
+            )}
+            <TzPicker />
+          </span>
+        }
+      />
       {econ.ok ? (
         <CalendarView events={events} today={today} initialDay={initialDay} initialPrefs={prefs} />
       ) : (

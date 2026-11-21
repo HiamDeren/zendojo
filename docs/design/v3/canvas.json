@@ -1,0 +1,162 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-21T12:15:00Z"
+ },
+ "title": "ZenDojo · UI v3",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Main.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1440,
+   "h": 1680,
+   "title": "Dashboard",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Mobile.dc.html": {
+   "x": 1520,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Dashboard · mobile"
+  },
+  "Markets.dc.html": {
+   "x": 0,
+   "y": 2120,
+   "w": 1440,
+   "h": 1780,
+   "title": "Markets",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "News.dc.html": {
+   "x": 1520,
+   "y": 2120,
+   "w": 1440,
+   "h": 1300,
+   "title": "News",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Earnings.dc.html": {
+   "x": 3040,
+   "y": 2120,
+   "w": 1440,
+   "h": 1300,
+   "title": "Earnings",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Econ.dc.html": {
+   "x": 4560,
+   "y": 2120,
+   "w": 1440,
+   "h": 1500,
+   "title": "Econ Calendar",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "TradePlan.dc.html": {
+   "x": 0,
+   "y": 4300,
+   "w": 1440,
+   "h": 1560,
+   "title": "Trade Plan",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Journal.dc.html": {
+   "x": 1520,
+   "y": 4300,
+   "w": 1440,
+   "h": 1700,
+   "title": "Journal · Nhật ký",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "JournalPnl.dc.html": {
+   "x": 3040,
+   "y": 4300,
+   "w": 1440,
+   "h": 1400,
+   "title": "Journal · PnL",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Knowledge.dc.html": {
+   "x": 0,
+   "y": 6300,
+   "w": 1440,
+   "h": 1560,
+   "title": "Knowledge",
+   "expand": "fill",
+   "is_interactive": true
+  },
+  "Lesson.dc.html": {
+   "x": 1520,
+   "y": 6300,
+   "w": 1440,
+   "h": 2300,
+   "title": "Knowledge · bài học",
+   "expand": "fill",
+   "is_interactive": true
+  }
+ },
+ "order": [
+  "Main.dc.html",
+  "Mobile.dc.html",
+  "Markets.dc.html",
+  "News.dc.html",
+  "Earnings.dc.html",
+  "Econ.dc.html",
+  "TradePlan.dc.html",
+  "Journal.dc.html",
+  "JournalPnl.dc.html",
+  "Knowledge.dc.html",
+  "Lesson.dc.html"
+ ],
+ "notes": {
+  "t-dash": {
+   "x": 0,
+   "y": -300,
+   "text": "Dashboard (cụm riêng)",
+   "kind": "title1",
+   "maxW": 1910
+  },
+  "t-mkt": {
+   "x": 0,
+   "y": 1820,
+   "text": "Thị trường · Markets → News → Earnings → Econ Calendar",
+   "kind": "title1",
+   "maxW": 6000
+  },
+  "t-trade": {
+   "x": 0,
+   "y": 4000,
+   "text": "Giao dịch · Trade Plan, Journal (Nhật ký | PnL | Thống kê)",
+   "kind": "title1",
+   "maxW": 4480
+  },
+  "t-learn": {
+   "x": 0,
+   "y": 6000,
+   "text": "Học · Knowledge",
+   "kind": "title1",
+   "maxW": 2960
+  },
+  "n-data": {
+   "x": 2000,
+   "y": 0,
+   "w": 340,
+   "text": "Mọi con số, tiêu đề tin và lịch earnings trên canvas là dữ liệu mẫu để dựng layout, không phải giá thật.",
+   "fill": "orange"
+  }
+ },
+ "designSystems": []
+}

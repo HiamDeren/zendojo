@@ -271,3 +271,59 @@ export function statsOf(days: DayWithTrades[]): Stats {
     session: sessionStatsOf(days),
   };
 }
+
+// ---------- PnL & lịch (UI v3): thống kê theo lệnh của một khoảng ngày ----------
+export type TradeStats = {
+  net: number;
+  trades: number;
+  winRate: number | null; // % lệnh có PnL net > 0
+  expectancy: number | null; // net / lệnh (USD)
+  profitFactor: number | null; // tổng lãi / tổng lỗ (net sau phí)
+  avgWinR: number | null;
+  avgLossR: number | null;
+  maxDD: number; // sụt giảm lớn nhất của đường vốn (USD, số dương)
+  equity: { date: string; cum: number }[];
+  bySetup: { key: string; name: string; n: number; expR: number | null; net: number }[];
+};
+
+export function tradeStats(days: DayWithTrades[]): TradeStats {
+  const sorted = [...days].sort((a, b) => (a.trade_date < b.trade_date ? -1 : 1));
+  const trades = sorted.flatMap((d) => d.journal_trades || []);
+  const netOf = (t: Trade) => (Number(t.pnl) || 0) - (Number(t.fee) || 0);
+  const wins = trades.filter((t) => netOf(t) > 0);
+  const losses = trades.filter((t) => netOf(t) < 0);
+  const grossWin = wins.reduce((a, t) => a + netOf(t), 0);
+  const grossLoss = -losses.reduce((a, t) => a + netOf(t), 0);
+  const avg = (xs: number[]) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null);
+  let cum = 0;
+  let peak = 0;
+  let maxDD = 0;
+  const equity = sorted.map((d) => {
+    cum += dayNet(d).net;
+    peak = Math.max(peak, cum);
+    maxDD = Math.max(maxDD, peak - cum);
+    return { date: d.trade_date, cum };
+  });
+  const net = trades.reduce((a, t) => a + netOf(t), 0);
+  return {
+    net,
+    trades: trades.length,
+    winRate: trades.length ? Math.round((wins.length / trades.length) * 100) : null,
+    expectancy: trades.length ? net / trades.length : null,
+    profitFactor: grossLoss > 0 ? grossWin / grossLoss : null,
+    avgWinR: avg(wins.filter((t) => t.r !== null && t.r !== undefined).map((t) => Number(t.r))),
+    avgLossR: avg(losses.filter((t) => t.r !== null && t.r !== undefined).map((t) => Number(t.r))),
+    maxDD,
+    equity,
+    bySetup: SETUPS.map(([key, name]) => {
+      const xs = trades.filter((t) => t.setup === key);
+      return {
+        key,
+        name,
+        n: xs.length,
+        expR: avg(xs.filter((t) => t.r !== null && t.r !== undefined).map((t) => Number(t.r))),
+        net: xs.reduce((a, t) => a + netOf(t), 0),
+      };
+    }),
+  };
+}

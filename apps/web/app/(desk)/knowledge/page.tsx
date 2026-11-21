@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { COURSES } from "@/lib/courses";
 import { getT } from "@/lib/prefs-server";
+import { PageHead } from "../_components/kit";
+import ContinueCard from "./ContinueCard";
 import KnowledgeTabs from "./KnowledgeTabs";
 
 export const metadata: Metadata = { title: "Knowledge" };
@@ -18,15 +20,39 @@ export default async function KnowledgePage() {
   const { t } = await getT();
   return (
     <>
-      <header className="page-head">
-        <div>
-          <span className="lbl">Knowledge</span>
-          <h1 className="h1">AMT → Context → Entry</h1>
-        </div>
-        <Link className="btn" href="/knowledge/quiz">
-          {t("Làm quiz ôn tập")}
-        </Link>
-      </header>
+      <PageHead
+        kicker={t("Học")}
+        title="Knowledge"
+        sub={t("Lộ trình AMT → Context → Entry, khoá học, trắc nghiệm")}
+        actions={
+          <Link className="btn" href="/knowledge/quiz">
+            {t("Làm quiz ôn tập")}
+          </Link>
+        }
+      />
+      <div className="g2-1">
+        <ContinueCard />
+        <section className="card" aria-label={t("Trắc nghiệm")}>
+          <span className="lbl">{t("Trắc nghiệm")}</span>
+          <div className="stack" style={{ gap: 2 }}>
+            <Link className="drow" href="/knowledge/quiz#luyen-tap" style={{ gridTemplateColumns: "28px minmax(0,1fr)" }}>
+              <span className="mono acc">A</span>
+              {t("Luyện tập")}
+            </Link>
+            <Link className="drow" href="/knowledge/quiz#thi-thu" style={{ gridTemplateColumns: "28px minmax(0,1fr)" }}>
+              <span className="mono acc">B</span>
+              {t("Thi thử")}
+            </Link>
+            <Link className="drow" href="/knowledge/quiz#cau-sai" style={{ gridTemplateColumns: "28px minmax(0,1fr)" }}>
+              <span className="mono acc">C</span>
+              {t("Ôn câu sai")}
+            </Link>
+          </div>
+          <Link className="more" href="/knowledge/tools#thuat-ngu">
+            {t("Thuật ngữ orderflow & TPO")} <span aria-hidden="true">›</span>
+          </Link>
+        </section>
+      </div>
       <section className="card" aria-label={t("Luồng mỗi ngày")}>
         <span className="lbl">{t("Luồng mỗi ngày")}</span>
         <ol className="flow">

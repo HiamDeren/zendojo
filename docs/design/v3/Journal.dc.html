@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Journal · Nhật ký</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0f1115;color:#e6e8eb;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#d4b483;text-decoration:none}a:hover{color:#e8cfa3}
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.long{color:#8cc2a4}.short{color:#e0947c}.acc{color:#d4b483}.dim{color:#8a94a1}.muted{color:#aeb6c0}.t2{color:#c9ced5}
+.card{background:#161a20;border:1px solid #252b34;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card.flush{padding:0;gap:0;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:24px}
+.lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a94a1;font-weight:600}
+.h1{font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#f1f2f4}
+.h2{font-size:18px;line-height:1.3;font-weight:650;letter-spacing:-.01em;color:#f1f2f4}
+.h3{font-size:15px;font-weight:600;color:#e6e8eb}
+.sub{font-size:14px;color:#aeb6c0}
+.small{font-size:12.5px}
+.link{font-size:12.5px;font-weight:600;color:#d4b483;display:inline-flex;align-items:center;gap:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:10px;border:1px solid #2e3540;background:#1a1e25;color:#e6e8eb;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#20252e;color:#e6e8eb}
+.btn.primary{background:#d4b483;border-color:#d4b483;color:#14161a}
+.btn.primary:hover{background:#e8cfa3;color:#14161a}
+.btn.sm{min-height:34px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.btn.ghost{background:transparent;border-color:transparent;color:#aeb6c0}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid #252b34;background:#161a20;color:#c9ced5;cursor:pointer}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;border:1px solid #2e3540;background:#1a1e25;font-size:12px;font-weight:600;color:#c9ced5;white-space:nowrap}
+.pill.long{background:#17231d;border-color:#2b4537;color:#8cc2a4}
+.pill.short{background:#281d1a;border-color:#4a2f28;color:#e0947c}
+.pill.acc{background:#1e1c17;border-color:#5a4c33;color:#d4b483}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:6px;background:#20252e;color:#c9ced5;font-size:11px;font-weight:600;letter-spacing:.02em}
+.tag.acc{background:#3a3326;color:#e8cfa3}
+.tag.long{background:#17231d;color:#8cc2a4}.tag.short{background:#281d1a;color:#e0947c}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:11px;background:#12151a;border:1px solid #252b34}
+.seg a,.seg button{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 14px;border-radius:8px;border:0;background:transparent;color:#aeb6c0;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.seg .on{background:#20252e;color:#f1f2f4;box-shadow:0 0 0 1px #2e3540 inset}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #252b34}
+.tabs a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:#aeb6c0;font-size:14px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a.on{color:#f1f2f4;border-bottom-color:#d4b483}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #2e3540;background:transparent;color:#c9ced5;font:500 12.5px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.chip.on{background:#1e1c17;border-color:#5a4c33;color:#e8cfa3}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8a94a1;font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid #252b34;white-space:nowrap}
+.tbl td{padding:11px 12px;border-bottom:1px solid #1f242c;color:#c9ced5;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .r{text-align:right}
+.row-hover:hover{background:#1a1e25}
+.input{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:10px;border:1px solid #5e6774;background:#12151a;color:#8a94a1;font-size:13px}
+.input input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#e6e8eb;font:13px Inter,system-ui,sans-serif}
+.kbd{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:5px;border:1px solid #2e3540;color:#aeb6c0;background:#1a1e25}
+.nav a{display:flex;align-items:center;gap:12px;min-height:40px;padding:0 12px;border-radius:10px;color:#aeb6c0;font-size:14px;font-weight:500}
+.nav a:hover{background:#1a1e25;color:#e6e8eb}
+.nav a.on{background:#1e1c17;color:#f1f2f4;box-shadow:0 0 0 1px #3a3326 inset}
+.nav a.on svg{color:#d4b483}
+.nav .soon{opacity:.62}
+.grp{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8a94a1;font-weight:600;padding:16px 12px 6px}
+.bar{height:6px;border-radius:999px;background:#20252e;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px}
+.ph{display:flex;align-items:center;justify-content:center;border:1px dashed #2e3540;border-radius:12px;background:#12151a;color:#8a94a1;font-size:12.5px}
+</style>
+</helmet>
+<div style="min-height:1760px;display:flex;flex-wrap:wrap;background:#0f1115;color:#e6e8eb;font-family:Inter,system-ui,sans-serif">
+
+<nav aria-label="Menu chính" style="flex:1 1 232px;background:#12151a;border-right:1px solid #1f242c;display:flex;flex-direction:column;padding:18px 12px 14px;gap:4px">
+  <a href="Main.dc.html" style="display:flex;align-items:center;gap:12px;padding:4px 8px 18px;color:#e6e8eb">
+    <img src="/_blob/6cd205f8fe321a7e4fffb9d8fe8fbb9a" alt="" width="36" height="36" style="width:36px;height:36px;border-radius:10px">
+    <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-weight:700;font-size:16px;letter-spacing:-.01em">ZenDojo</span><span class="small dim">Derenツ</span></span>
+  </a>
+  <div class="nav" style="display:flex;flex-direction:column;gap:2px">
+<a href="Main.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a>
+<div class="grp">Thị trường</div>
+<a href="Markets.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span>Markets</span></a>
+<a href="News.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg><span>News</span></a>
+<a href="Earnings.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Earnings</span></a>
+<a href="Econ.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span>Econ Calendar</span></a>
+<div class="grp">Giao dịch</div>
+<a href="TradePlan.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg><span>Trade Plan</span></a>
+<a href="Journal.dc.html" class="on" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 9h6M9 13h4"/></svg><span>Journal</span></a>
+<div class="grp">Học</div>
+<a href="Knowledge.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8l10-4 10 4-10 4z"/><path d="M6 10v5c0 1.8 2.7 3.5 6 3.5s6-1.7 6-3.5v-5"/></svg><span>Knowledge</span></a>
+<div class="grp">Sắp có</div>
+<a href="#" class="soon" aria-disabled="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5M3 16.5l9 4.5 9-4.5"/></svg><span style="flex:1">Options</span><span class="tag">soon</span></a>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;align-items:center;gap:10px;padding:12px 8px 4px;border-top:1px solid #1f242c;margin-top:16px">
+    <span style="width:34px;height:34px;border-radius:50%;background:#3a3326;color:#e8cfa3;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">DE</span>
+    <span style="flex:1;display:flex;flex-direction:column;line-height:1.25;min-width:0"><span style="font-size:13px;font-weight:600">Derenツ</span><span class="small dim">Profile</span></span>
+    <span class="seg" style="padding:2px"><button class="on" type="button" style="min-height:26px;padding:0 8px;font-size:11.5px">VI</button><button type="button" style="min-height:26px;padding:0 8px;font-size:11.5px">EN</button></span>
+  </div>
+</nav>
+<div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column">
+
+<header style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px;padding:12px 32px;border-bottom:1px solid #1f242c;background:#0f1115">
+  <span class="small dim" style="display:flex;align-items:center;gap:6px"><span >Giao dịch</span><span style="color:#4a525e">/</span><span >Journal</span><span style="color:#4a525e">/</span><span style="color:#e6e8eb;font-weight:600">Nhật ký</span></span>
+  <div style="flex:1"></div>
+  <label class="input" style="width:300px;max-width:100%"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="text" placeholder="Tìm mã, trang, ngày journal…" aria-label="Tìm nhanh"><span class="kbd">⌘K</span></label>
+  <span class="pill" style="height:34px;padding:0 12px;gap:8px"><span class="dot" style="background:#e5534b"></span><span style="color:#e6e8eb">CB Consumer Confidence</span><span class="mono dim">10:00 ET</span><span class="mono" style="color:#ec6a63">18:40</span></span>
+  <span style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2"><span class="mono" style="font-size:14px;font-weight:600;color:#f1f2f4">09:41:20 <span class="dim" style="font-weight:500">ET</span></span><span class="mono small dim">21:41 VN · NY AM</span></span>
+</header>
+<main style="width:100%;max-width:1400px;margin:0 auto;padding:28px 32px 56px;display:flex;flex-direction:column;gap:20px">
+
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">Giao dịch</span><h1 class="h1">Journal</h1><p class="sub">Recap mỗi phiên: bối cảnh, log khung, lệnh, ảnh và bài học</p></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="icon-btn" type="button" aria-label="Ngày trước"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span class="btn sm" style="cursor:default">Thứ Ba 24/11/2026</span><button class="icon-btn" type="button" aria-label="Ngày sau"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button><span class="small" style="color:#f0883e;display:inline-flex;align-items:center;gap:6px"><span class="dot" style="background:#f0883e"></span>Chưa lưu</span><button class="btn primary" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l3 3v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><path d="M8 3v5h7V3M8 21v-7h8v7"/></svg> Lưu journal <span class="kbd" style="background:transparent;border-color:#14161a55;color:#14161a">⌘S</span></button></div>
+</div>
+<nav class="tabs" aria-label="Journal"><a href="Journal.dc.html" class="on" aria-current="page"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 9h6M9 13h4"/></svg>Nhật ký</a><a href="JournalPnl.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>PnL & lịch</a><a href="JournalPnl.dc.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Thống kê</a></nav>
+<div style="display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start">
+  <div style="display:flex;flex-direction:column;gap:20px"><section class="card" style="gap:10px" aria-label="Chọn ngày">
+  <div class="ch"><span class="h3">Tháng 11</span><span style="display:flex;gap:4px"><button class="icon-btn" style="width:32px;height:32px" type="button" aria-label="Tháng trước"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="icon-btn" style="width:32px;height:32px" type="button" aria-label="Tháng sau"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span></div>
+  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px"><span class="lbl" style="text-align:center">T2</span><span class="lbl" style="text-align:center">T3</span><span class="lbl" style="text-align:center">T4</span><span class="lbl" style="text-align:center">T5</span><span class="lbl" style="text-align:center">T6</span><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">2</a><a href="#" style="background:#281d1a;color:#e0947c;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">3</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">4</a><a href="#" style="background:#1a1e25;color:#8a94a1;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">5</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">6</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">9</a><a href="#" style="background:#281d1a;color:#e0947c;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">10</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">11</a><a href="#" style="background:#281d1a;color:#e0947c;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">12</a><a href="#" style="background:#1a1e25;color:#8a94a1;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">13</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">16</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">17</a><a href="#" style="background:#17231d;color:#8cc2a4;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">18</a><a href="#" style="background:#281d1a;color:#e0947c;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">19</a><a href="#" style="background:#1a1e25;color:#8a94a1;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">20</a><a href="#" style="background:#281d1a;color:#e0947c;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">23</a><a href="#" style="box-shadow:0 0 0 1px #5a4c33 inset;background:#1e1c17;color:#d4b483;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">24</a><a href="#" style="background:transparent;color:#4a525e;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">25</a><a href="#" style="background:transparent;color:#4a525e;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">26</a><a href="#" style="background:transparent;color:#4a525e;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center" class="mono small">27</a></div>
+  <div class="small dim" style="display:flex;gap:10px;flex-wrap:wrap"><span><span class="dot" style="background:#8cc2a4"></span> Lãi</span><span><span class="dot" style="background:#e0947c"></span> Lỗ</span><span><span class="dot" style="background:#8a94a1"></span> No trade</span></div>
+</section><section class="card" style="gap:10px" aria-label="Tóm tắt tháng">
+  <span class="lbl">Tháng này</span>
+  <div class="ch"><span class="small muted">Net</span><span class="mono long" style="font-weight:600">+$3,240</span></div>
+  <div class="ch"><span class="small muted">Ngày lãi / lỗ</span><span class="mono t2">9 / 5</span></div>
+  <div class="ch"><span class="small muted">Theo plan</span><span class="mono t2">86%</span></div>
+  <div class="ch"><span class="small muted">Chuỗi recap</span><span class="mono acc">12 ngày</span></div>
+</section></div>
+  <div style="display:flex;flex-direction:column;gap:20px"><section class="card" aria-label="Ngày và bối cảnh">
+  <div class="ch"><span class="lbl">Ngày &amp; kết quả</span><span class="small dim">Plan 24/11 đã tự gắn</span></div>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px">
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Kết quả</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Win</button><button class="chip" type="button">Loss</button><button class="chip" type="button">BE</button><button class="chip" type="button">No trade</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Day type</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip" type="button">Normal</button><button class="chip on" type="button">Normal var.</button><button class="chip" type="button">Trend</button><button class="chip" type="button">Double dist.</button><button class="chip" type="button">Neutral</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Tâm lý trước phiên</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip" type="button">1</button><button class="chip" type="button">2</button><button class="chip" type="button">3</button><button class="chip on" type="button">4</button><button class="chip" type="button">5</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Theo plan</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Đúng hoàn toàn</button><button class="chip" type="button">Một phần</button><button class="chip" type="button">Không</button></div></div>
+  </div>
+</section><section class="card" aria-label="Log phiên">
+  <div class="ch"><span class="lbl">Log phiên · Composite × pRTH × OVN</span><span class="tag acc">Điền sẵn từ plan</span></div>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px">
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Vị trí composite</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Trong HVN</button><button class="chip" type="button">Trên HVN</button><button class="chip" type="button">Dưới HVN</button><button class="chip" type="button">Trong LVN</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">pRTH build</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">P</button><button class="chip" type="button">b</button><button class="chip" type="button">D</button><button class="chip" type="button">Trend</button><button class="chip" type="button">Double</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">OVN</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Inside</button><button class="chip" type="button">Trên VA</button><button class="chip" type="button">Dưới VA</button><button class="chip" type="button">Gap</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Bias</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Long</button><button class="chip" type="button">Short</button><button class="chip" type="button">Trung tính</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Open type · 10:00</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip" type="button">OD ↑</button><button class="chip" type="button">OD ↓</button><button class="chip" type="button">OTD</button><button class="chip" type="button">ORR</button><button class="chip on" type="button">OA</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">IB</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip" type="button">Hẹp</button><button class="chip on" type="button">Trung bình</button><button class="chip" type="button">Rộng</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Mép HVN</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Giữ</button><button class="chip" type="button">Thủng</button><button class="chip" type="button">Chưa chạm</button></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="lbl">Tới HVN kế</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">Có</button><button class="chip" type="button">Không</button><button class="chip" type="button">Không áp dụng</button></div></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:#12151a"><span class="small muted" style="flex:1">Bias đúng?</span><span class="seg" style="padding:2px"><button class="on" type="button" style="min-height:30px">Đúng</button><button type="button" style="min-height:30px">Sai</button></span></div>
+</section><section class="card flush" aria-label="Lệnh trong ngày">
+  <div class="ch" style="padding:16px 18px"><span class="lbl">Lệnh · 2 / 3</span><button class="btn sm" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Thêm lệnh</button></div>
+  <div style="overflow-x:auto"><table class="tbl"><thead><tr><th>#</th><th>Giờ ET</th><th>Hướng</th><th>Setup</th><th class="r">HĐ</th><th class="r">Entry</th><th class="r">Exit</th><th class="r">R</th><th class="r">PnL</th><th>Plan</th><th>Lỗi</th></tr></thead>
+  <tbody><tr class="row-hover"><td class="mono dim">1</td><td class="mono">09:52</td><td><span class="tag long">Long</span></td><td><span class="tag">F</span></td><td class="r mono">2</td><td class="r mono">28,274.25</td><td class="r mono">28,398.00</td><td class="r mono long" style="font-weight:600">+2.4R</td><td class="r mono long" style="font-weight:600">+$495</td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8cc2a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></td><td class="small muted">—</td></tr><tr class="row-hover"><td class="mono dim">2</td><td class="mono">10:41</td><td><span class="tag long">Long</span></td><td><span class="tag">C</span></td><td class="r mono">1</td><td class="r mono">28,403.50</td><td class="r mono">28,390.00</td><td class="r mono short" style="font-weight:600">−0.6R</td><td class="r mono short" style="font-weight:600">−$75</td><td><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e0947c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></td><td class="small muted">Vào sớm</td></tr><tr><td colspan="7" class="small dim">Tổng · phí $16.80</td><td class="r mono long" style="font-weight:700">+1.8R</td><td class="r mono long" style="font-weight:700">+$403</td><td colspan="2"></td></tr></tbody></table></div>
+</section><section class="card" aria-label="Ảnh lệnh">
+  <div class="ch"><span class="lbl">Ảnh lệnh</span><span class="small dim">Kéo thả · dán Ctrl+V</span></div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+    <div style="display:flex;flex-direction:column;gap:6px"><div class="ph" style="height:110px;border-style:solid;background:#1a1e25"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div><span class="small t2">Lệnh 1 · footprint</span></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><div class="ph" style="height:110px;border-style:solid;background:#1a1e25"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div><span class="small t2">Lệnh 1 · M30</span></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><div class="ph" style="height:110px;border-style:solid;background:#1a1e25"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/></svg></div><span class="small t2">Lệnh 2 · DOM</span></div>
+    <button type="button" class="ph" style="height:110px;flex-direction:column;gap:6px;cursor:pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg><span>Tải ảnh lên</span></button>
+  </div>
+</section><section class="card" aria-label="Recap">
+  <nav class="tabs"><a href="#" class="on">Làm tốt</a><a href="#">Cần sửa</a><a href="#">Bài học</a><a href="#">Ghi chú tự do</a></nav>
+  <textarea aria-label="Làm tốt" rows="5" style="width:100%;resize:vertical;padding:14px;border-radius:10px;border:1px solid #5e6774;background:#12151a;color:#e6e8eb;font:14px/1.6 Inter,system-ui,sans-serif">Chờ đúng mép dưới HVN, không đuổi giá lúc open. Thoát target 1 theo plan.</textarea>
+</section></div>
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

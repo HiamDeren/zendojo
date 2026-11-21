@@ -12,23 +12,23 @@ import TzPicker from "./TzPicker";
 import { useUi } from "./Ui";
 
 type Item = { label: string; href: string; icon: string; soon?: boolean; exact?: boolean; also?: string[] };
+// IA v3 (D59): Dashboard đứng riêng; Thị trường · Giao dịch · Học · Sắp có. PnL là tab con của Journal.
 const GROUPS: { name: string; items: Item[] }[] = [
+  { name: "", items: [{ label: "Dashboard", href: "/dashboard", icon: "dashboard" }] },
   {
     name: "Thị trường",
     items: [
-      { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
-      { label: "Calendar", href: "/calendar", icon: "calendar" },
+      { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
       { label: "News", href: "/news", icon: "news" },
       { label: "Earnings", href: "/earnings", icon: "earnings" },
-      { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
+      { label: "Econ Calendar", href: "/calendar", icon: "calendar" },
     ],
   },
   {
     name: "Giao dịch",
     items: [
       { label: "Trade Plan", href: "/trade-plan", icon: "plan" },
-      { label: "Journal", href: "/journal", icon: "journal", exact: true },
-      { label: "PnL", href: "/journal/pnl", icon: "pnl" },
+      { label: "Journal", href: "/journal", icon: "journal" },
     ],
   },
   { name: "Học", items: [{ label: "Knowledge", href: "/knowledge", icon: "knowledge" }] },
@@ -38,13 +38,20 @@ const GROUPS: { name: string; items: Item[] }[] = [
 // Thanh tab dưới đáy trên mobile
 const TABS: Item[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
-  { label: "Calendar", href: "/calendar", icon: "calendar" },
   { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
+  { label: "Plan", href: "/trade-plan", icon: "plan" },
   { label: "Journal", href: "/journal", icon: "journal" },
 ];
-// Khách không thấy nhóm Giao dịch (Trade Plan / Journal / PnL)
-const GUEST_GROUPS = GROUPS.filter((g) => g.name !== "Giao dịch");
-const GUEST_TABS: Item[] = [...TABS.slice(0, 3), { label: "News", href: "/news", icon: "news" }];
+// Khách (D48): Dashboard, nhóm Thị trường, Knowledge
+const GUEST_GROUPS = GROUPS.filter((g) => g.name !== "Giao dịch" && g.name !== "Sắp có");
+const GUEST_TABS: Item[] = [
+  { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
+  { label: "Markets", href: "/markets", icon: "stock", also: ["/stock"] },
+  { label: "News", href: "/news", icon: "news" },
+  { label: "Econ", href: "/calendar", icon: "calendar" },
+];
+// Nhãn breadcrumb cho trang không nằm trong menu
+const EXTRA: Record<string, string> = { "/profile": "Profile", "/stock": "Markets" };
 
 export function Avatar({ owner, large }: { owner: Owner; large?: boolean }) {
   const cls = "avatar" + (large ? " lg" : "");
@@ -90,6 +97,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
   const hit = (h: string, exact?: boolean) => path === h || (!exact && path.startsWith(h + "/"));
   const active = (it: Item) => !!it.href && (hit(it.href, it.exact) || !!it.also?.some((h) => hit(h)));
   const current = groups.flatMap((g) => g.items).find(active);
+  const crumb = current ? current.label : (Object.entries(EXTRA).find(([h]) => hit(h))?.[1] ?? "");
 
   return (
     <div className={"shell" + (side === "collapsed" ? " is-collapsed" : "") + (drawer ? " drawer-open" : "")}>
@@ -97,7 +105,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
         <button type="button" className="icon-btn" aria-label={t("Mở menu")} aria-expanded={drawer} onClick={() => setDrawer(true)}>
           <Icon name="menu" />
         </button>
-        <span className="mtop-title">{current ? t(current.label) : "ZenDojo"}</span>
+        <span className="mtop-title">{crumb ? t(crumb) : "ZenDojo"}</span>
         <button type="button" className="icon-btn" aria-label={t("Tìm nhanh")} onClick={() => setPal(true)}>
           <Icon name="search" size={18} />
         </button>
@@ -132,8 +140,8 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
 
           <div className="side-scroll">
             {groups.map((g) => (
-              <div className="nav-group" key={g.name}>
-                <span className="lbl nl">{t(g.name)}</span>
+              <div className="nav-group" key={g.name || "top"}>
+                {g.name && <span className="lbl nl">{t(g.name)}</span>}
                 {g.items.map((it) =>
                   it.soon ? (
                     <span className="navlink soon" key={it.label} aria-disabled="true" title={t(it.label)}>
@@ -159,15 +167,19 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
           </div>
 
           <div className="side-foot">
-            <Link className="me" href="/profile" title="Profile">
-              <Avatar owner={owner} />
-              <span className="nl me-text">
-                <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{owner.name}</span>
-                <span className="small dim">{guest ? t("Khách") : "Profile"}</span>
+            <div className="me-row">
+              <Link className="me" href="/profile" title="Profile">
+                <Avatar owner={owner} />
+                <span className="nl me-text">
+                  <span style={{ fontSize: 13, fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{owner.name}</span>
+                  <span className="small dim">{guest ? t("Khách") : "Profile"}</span>
+                </span>
+              </Link>
+              <span className="nl">
+                <LangSwitch />
               </span>
-            </Link>
+            </div>
             <div className="nl side-tools">
-              <LangSwitch />
               <TzPicker />
               <form action="/auth/logout" method="post">
                 <button type="submit" className="icon-btn" aria-label={t("Đăng xuất")} title={t("Đăng xuất")}>
@@ -180,7 +192,7 @@ export default function Shell({ owner, events, children }: { owner: Viewer; even
       </nav>
 
       <div className="content">
-        <Topbar events={events} onSearch={() => setPal(true)} guest={guest} />
+        <Topbar events={events} onSearch={() => setPal(true)} guest={guest} crumb={crumb ? t(crumb) : ""} />
         <main className="main">{children}</main>
       </div>
 

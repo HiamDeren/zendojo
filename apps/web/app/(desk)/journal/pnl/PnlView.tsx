@@ -17,32 +17,18 @@ export default function PnlView({ weeks, today }: { weeks: PnlWeek[]; today: str
   const val = (net: number, r: number) => (unit === "usd" ? net : r);
 
   const days = weeks.flatMap((w) => w.days).filter((d) => d.date && d.n > 0);
-  const net = days.reduce((a, d) => a + d.net, 0);
-  const r = days.reduce((a, d) => a + d.r, 0);
-  const green = days.filter((d) => val(d.net, d.r) > 0).length;
-  const red = days.filter((d) => val(d.net, d.r) < 0).length;
-  const best = days.reduce<PnlDay | null>((a, d) => (!a || val(d.net, d.r) > val(a.net, a.r) ? d : a), null);
-  const worst = days.reduce<PnlDay | null>((a, d) => (!a || val(d.net, d.r) < val(a.net, a.r) ? d : a), null);
+  const _net = days.reduce((a, d) => a + d.net, 0);
+  const _r = days.reduce((a, d) => a + d.r, 0);
+  const _green = days.filter((d) => val(d.net, d.r) > 0).length;
+  const _red = days.filter((d) => val(d.net, d.r) < 0).length;
+  const _best = days.reduce<PnlDay | null>((a, d) => (!a || val(d.net, d.r) > val(a.net, a.r) ? d : a), null);
+  const _worst = days.reduce<PnlDay | null>((a, d) => (!a || val(d.net, d.r) < val(a.net, a.r) ? d : a), null);
   const dm = (d: string | null) => (d ? `${d.slice(8)}/${d.slice(5, 7)}` : "");
 
   return (
     <>
-      <div className="row wrap">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 14, flex: "1 1 600px" }}>
-          <Tile k={t("Net PnL tháng")} v={f(net, r)} c={col(val(net, r))} sub={t("{n} ngày có lệnh", { n: days.length })} />
-          <Tile
-            k={t("Ngày xanh / đỏ")}
-            v={`${green} / ${red}`}
-            sub={days.length ? t("Win rate ngày {p}%", { p: Math.round((green / days.length) * 100) }) : "—"}
-          />
-          <Tile k={t("Ngày tốt nhất")} v={best ? f(best.net, best.r) : "—"} c={best ? col(val(best.net, best.r)) : undefined} sub={dm(best?.date ?? null)} />
-          <Tile
-            k={t("Ngày tệ nhất")}
-            v={worst ? f(worst.net, worst.r) : "—"}
-            c={worst ? col(val(worst.net, worst.r)) : undefined}
-            sub={dm(worst?.date ?? null)}
-          />
-        </div>
+      <div className="ch wrap">
+        <span className="lbl">{t("Lịch PnL tháng")}</span>
         <div className="seg" role="group" aria-label={t("Đơn vị")}>
           <button type="button" aria-pressed={unit === "usd"} onClick={() => setUnit("usd")}>
             $
@@ -110,7 +96,7 @@ export default function PnlView({ weeks, today }: { weeks: PnlWeek[]; today: str
   );
 }
 
-function Tile({ k, v, sub, c }: { k: string; v: string; sub: string; c?: string }) {
+function _Tile({ k, v, sub, c }: { k: string; v: string; sub: string; c?: string }) {
   return (
     <div className="card tight" style={{ padding: "14px 16px" }}>
       <span className="lbl">{k}</span>
