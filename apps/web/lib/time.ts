@@ -101,12 +101,30 @@ export function mondayOf(date: string) {
   return addDays(date, w === 0 ? 1 : w === 6 ? 2 : 1 - w);
 }
 
-export function fmtTime(ts: number, timeZone: string, withDate = false) {
+export function fmtTime(ts: number, timeZone: string, withDate = false, withSeconds = false) {
   return new Date(ts).toLocaleString("en-GB", {
     timeZone,
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,
+    ...(withSeconds ? { second: "2-digit" } : {}),
     ...(withDate ? { day: "2-digit", month: "2-digit" } : {}),
   });
+}
+
+// Mốc phiên NQ theo giờ ET (UI v3: timeline Dashboard, topbar)
+export const SESSION_BANDS = [
+  { key: "pre", label: "Pre-market", from: 4 * 60, to: 9 * 60 + 30 },
+  { key: "am", label: "NY AM", from: 9 * 60 + 30, to: 11 * 60 + 30 },
+  { key: "lunch", label: "Lunch", from: 11 * 60 + 30, to: 13 * 60 + 30 },
+  { key: "pm", label: "NY PM", from: 13 * 60 + 30, to: 16 * 60 },
+] as const;
+
+// Tên phiên theo phút ET + thứ (0 = CN). Globex mở lại 18:00 ET Chủ nhật.
+export function sessionName(minutesEt: number, dow: number) {
+  if (dow === 6 || (dow === 0 && minutesEt < 18 * 60) || (dow === 5 && minutesEt >= 17 * 60)) return "Cuối tuần";
+  const band = SESSION_BANDS.find((b) => minutesEt >= b.from && minutesEt < b.to);
+  if (band) return band.label;
+  if (minutesEt >= 16 * 60 && minutesEt < 18 * 60) return "After-hours";
+  return "Globex";
 }

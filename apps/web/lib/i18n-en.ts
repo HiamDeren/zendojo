@@ -645,5 +645,10 @@ const EN: Record<string, string> = {
   "Phần này không tải được. Dữ liệu đã lưu không bị ảnh hưởng.": "This section failed to load. Your saved data is not affected.",
   "Mã lỗi": "Error ID",
   "Đang đọc bài…": "Loading article…",
+  // UI v3 · shell
+  "Tìm mã, trang, ngày journal…": "Search symbols, pages, journal dates…",
+  "Xem thêm": "See more",
+  "Journal · PnL & lịch": "Journal · PnL & calendar",
+  "Journal · Thống kê": "Journal · Stats",
 };
 export default EN;

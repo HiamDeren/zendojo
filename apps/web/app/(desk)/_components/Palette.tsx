@@ -10,14 +10,15 @@ type Cmd = { id: string; label: string; hint: string; icon: string; href: string
 
 const PAGES: { label: string; href: string; icon: string; keys: string }[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard", keys: "dashboard tong quan home" },
-  { label: "Calendar", href: "/calendar", icon: "calendar", keys: "calendar lich tin kinh te economic" },
+  { label: "Markets", href: "/markets", icon: "stock", keys: "markets thi truong chi so hang hoa crypto fx lai suat sector co phieu" },
   { label: "News", href: "/news", icon: "news", keys: "news tin tuc" },
   { label: "Earnings", href: "/earnings", icon: "earnings", keys: "earnings bao cao ket qua" },
-  { label: "Markets", href: "/markets", icon: "stock", keys: "markets thi truong sector crypto coin co phieu" },
-  { label: "Trade Plan", href: "/trade-plan", icon: "plan", keys: "trade plan ke hoach" },
+  { label: "Econ Calendar", href: "/calendar", icon: "calendar", keys: "econ calendar lich tin kinh te economic" },
+  { label: "Trade Plan", href: "/trade-plan", icon: "plan", keys: "trade plan ke hoach bias" },
   { label: "Journal", href: "/journal", icon: "journal", keys: "journal nhat ky recap" },
-  { label: "PnL Calendar", href: "/journal/pnl", icon: "pnl", keys: "pnl lai lo calendar" },
-  { label: "Knowledge", href: "/knowledge", icon: "knowledge", keys: "knowledge kien thuc hoc tpo orderflow" },
+  { label: "Journal · PnL & lịch", href: "/journal/pnl", icon: "pnl", keys: "pnl lai lo calendar lich" },
+  { label: "Journal · Thống kê", href: "/journal/stats", icon: "pnl", keys: "thong ke stats win rate expectancy" },
+  { label: "Knowledge", href: "/knowledge", icon: "knowledge", keys: "knowledge kien thuc hoc tpo orderflow quiz" },
   { label: "Profile", href: "/profile", icon: "user", keys: "profile cai dat settings mui gio" },
 ];
 
@@ -36,7 +37,7 @@ function parseDate(q: string): string | null {
   return `${y}-${String(mo).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 }
 
-const OWNER_ONLY = ["/trade-plan", "/journal", "/journal/pnl"];
+const OWNER_ONLY = ["/trade-plan", "/journal", "/journal/pnl", "/journal/stats"];
 
 export default function Palette({ open, onClose, guest = false }: { open: boolean; onClose: () => void; guest?: boolean }) {
   const { t } = useUi();
