@@ -1,9 +1,12 @@
-# CLAUDE.md · orderflow-trading-system
+# CLAUDE.md · ZenDojo
+
+Tên dự án: **ZenDojo** (từ 2026-11-20, D50). Repo `HiamDeren/zendojo` (trước là `orderflow-trading-system`), Vercel project `zendojo`, domain chính `zendojo-deren.vercel.app`, Supabase project **ZenDojo**.
 
 Đọc file này trước mọi việc trong repo. Bối cảnh đầy đủ nằm trong thư mục [`claude/`](claude/README.md).
 
 ## Repo này là gì
 - Hiện tại: **monorepo pnpm**. `apps/web` là app Next.js (Vercel) gồm site học tĩnh trong `apps/web/public/` (HTML + CSS + vanilla JS, học orderflow / TPO cho NQ intraday, lập trade plan mỗi ngày) và API `apps/web/app/api/plan/route.ts` nối Supabase + Discord. `supabase/` chứa migration. Stack đã chốt: [`claude/07`](claude/07-chuyen-doi-web-app.md), D26–D31.
+- **Dashboard ZenDojo** (trước là Deren Desk, D49; logo ensō mực + glitch, chữ ツ bút lông; ảnh ở `apps/web/public/assets/img/zendojo/`, sinh bằng `scripts/zendojo-brand/` (build.py → raster.mjs → og.html; brand kit tải về: kit.mjs → kit.py)) (Next.js, `apps/web/app/(desk)/`): `/dashboard`, `/calendar`, `/news`, `/earnings`, `/markets` (Tổng quan / Stocks theo sector / Crypto), `/stock` (+ `/stock/[mã]`), `/trade-plan` (Trade Plan, trước là Plan Studio), `/journal` (tab con `/journal/pnl` = PnL Calendar), `/knowledge` (+ `/knowledge/levels|plan|tools|quiz` nhúng trang học cũ chế độ `?embed=1`), `/profile`; thanh trên + command palette Ctrl/Cmd+K; VI / EN (`lib/i18n-en.ts`, câu VI là khoá) và múi giờ hiển thị lưu trong cookie; `/login` chỉ đăng nhập Discord của chủ sở hữu (`OWNER_DISCORD_ID`, D38) + khách đã duyệt (bảng `access.members`, duyệt ở Profile, D48: chỉ xem phần thị trường, không thấy Trade Plan / Journal). `/` chuyển hướng: đã đăng nhập → `/dashboard`, chưa → `/login`; trang chủ học cũ ở `/learn` (`index.html`). Cấu hình: [`docs/dashboard-setup.md`](docs/dashboard-setup.md). Màu / bố cục theo canvas thiết kế (link trong `claude/08-roadmap.md`).
 - Hướng đi: thành **web app cá nhân / dashboard** của Deren (đăng nhập, plan, economic calendar, options GEX/DEX/OI, heatmap, news, earnings...). Kế hoạch chuyển đổi: [`claude/07-chuyen-doi-web-app.md`](claude/07-chuyen-doi-web-app.md).
 - Chủ repo: Deren, fullstack dev, trader NQ PropFirm (ATAS + Rithmic, NY AM 9:30–11:30 ET).
 
@@ -23,7 +26,8 @@
 - Database: đổi schema bằng file mới trong `supabase/migrations/` (không sửa tay trên dashboard).
 - Cài / chạy: `pnpm install`, `pnpm dev` (Next.js), `pnpm build`.
 - Trade plan chính thức (từ 2026-11-17) là khung **Composite × pRTH × OVN** ở trang `plan.html` (Trade Plan). `/testing`, `/overlap` chỉ còn là redirect.
-- Artifact "NQ Trade Plan · Composite × pRTH × OVN" trên claude.ai: nguồn ở `artifact/`, engine lấy từ `plan-core.js`. Đổi engine hoặc trang plan thì `node scripts/build-artifact.mjs` rồi publish lại artifact (xem `artifact/README.md`).
+- Artifact "NQ Trade Plan · Composite × pRTH × OVN" trên claude.ai: **ngừng duy trì từ 2026-11-21 (D52)**. `artifact/` chỉ là lưu trữ, không cần build / publish lại khi đổi engine.
+- Log phiên (khung Composite × pRTH × OVN) nằm trong Journal: cột ở `trading.journal_entries` + `journal_trades.setup` (D51).
 - Sau mỗi thay đổi đáng kể: cập nhật [`claude/08-roadmap.md`](claude/08-roadmap.md) và [`claude/09-nhat-ky.md`](claude/09-nhat-ky.md).
 - Khi Deren nhắn "liệt kê các việc còn lại": trả lời từ `claude/08-roadmap.md`.
 
@@ -34,6 +38,8 @@
 - Chuyển sang web app: dùng [`claude/prompts/chuyen-doi-web-app.md`](claude/prompts/chuyen-doi-web-app.md).
 
 ## Kiểm tra nhanh
+- Test + lint: `pnpm test` (Vitest, `apps/web/tests/`), `pnpm lint` / `pnpm format` (Biome). CI chạy đủ trên mọi PR (`.github/workflows/ci.yml`).
+- API dùng helper `apps/web/lib/api.ts` (lỗi `{ ok:false, error, code }`, giữ chuỗi `error` cũ) và schema zod `apps/web/lib/schemas.ts` (JSON v1 không đổi tên trường).
 - Engine plan: `node scripts/check-plan-core.mjs` (snapshot `scripts/plan-core.snapshot.json`).
 - Local: `pnpm dev` hoặc `pnpm build && pnpm --filter web start` (trang tĩnh + API). API cần biến môi trường; không có thì test trên preview `development`.
 - Test API bằng `apps/web/public/assets/sample_plan_20261112.json` (xem `docs/plan-sender/README.md`, Bước 3). Test xong nhớ xoá dòng mẫu trong `trade_plans` và ảnh trong Storage.

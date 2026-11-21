@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Econ Calendar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0f1115;color:#e6e8eb;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#d4b483;text-decoration:none}a:hover{color:#e8cfa3}
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.long{color:#8cc2a4}.short{color:#e0947c}.acc{color:#d4b483}.dim{color:#8a94a1}.muted{color:#aeb6c0}.t2{color:#c9ced5}
+.card{background:#161a20;border:1px solid #252b34;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card.flush{padding:0;gap:0;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:24px}
+.lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a94a1;font-weight:600}
+.h1{font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#f1f2f4}
+.h2{font-size:18px;line-height:1.3;font-weight:650;letter-spacing:-.01em;color:#f1f2f4}
+.h3{font-size:15px;font-weight:600;color:#e6e8eb}
+.sub{font-size:14px;color:#aeb6c0}
+.small{font-size:12.5px}
+.link{font-size:12.5px;font-weight:600;color:#d4b483;display:inline-flex;align-items:center;gap:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:10px;border:1px solid #2e3540;background:#1a1e25;color:#e6e8eb;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#20252e;color:#e6e8eb}
+.btn.primary{background:#d4b483;border-color:#d4b483;color:#14161a}
+.btn.primary:hover{background:#e8cfa3;color:#14161a}
+.btn.sm{min-height:34px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.btn.ghost{background:transparent;border-color:transparent;color:#aeb6c0}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid #252b34;background:#161a20;color:#c9ced5;cursor:pointer}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;border:1px solid #2e3540;background:#1a1e25;font-size:12px;font-weight:600;color:#c9ced5;white-space:nowrap}
+.pill.long{background:#17231d;border-color:#2b4537;color:#8cc2a4}
+.pill.short{background:#281d1a;border-color:#4a2f28;color:#e0947c}
+.pill.acc{background:#1e1c17;border-color:#5a4c33;color:#d4b483}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:6px;background:#20252e;color:#c9ced5;font-size:11px;font-weight:600;letter-spacing:.02em}
+.tag.acc{background:#3a3326;color:#e8cfa3}
+.tag.long{background:#17231d;color:#8cc2a4}.tag.short{background:#281d1a;color:#e0947c}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:11px;background:#12151a;border:1px solid #252b34}
+.seg a,.seg button{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 14px;border-radius:8px;border:0;background:transparent;color:#aeb6c0;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.seg .on{background:#20252e;color:#f1f2f4;box-shadow:0 0 0 1px #2e3540 inset}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #252b34}
+.tabs a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:#aeb6c0;font-size:14px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a.on{color:#f1f2f4;border-bottom-color:#d4b483}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #2e3540;background:transparent;color:#c9ced5;font:500 12.5px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.chip.on{background:#1e1c17;border-color:#5a4c33;color:#e8cfa3}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8a94a1;font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid #252b34;white-space:nowrap}
+.tbl td{padding:11px 12px;border-bottom:1px solid #1f242c;color:#c9ced5;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .r{text-align:right}
+.row-hover:hover{background:#1a1e25}
+.input{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:10px;border:1px solid #5e6774;background:#12151a;color:#8a94a1;font-size:13px}
+.input input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#e6e8eb;font:13px Inter,system-ui,sans-serif}
+.kbd{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:5px;border:1px solid #2e3540;color:#aeb6c0;background:#1a1e25}
+.nav a{display:flex;align-items:center;gap:12px;min-height:40px;padding:0 12px;border-radius:10px;color:#aeb6c0;font-size:14px;font-weight:500}
+.nav a:hover{background:#1a1e25;color:#e6e8eb}
+.nav a.on{background:#1e1c17;color:#f1f2f4;box-shadow:0 0 0 1px #3a3326 inset}
+.nav a.on svg{color:#d4b483}
+.nav .soon{opacity:.62}
+.grp{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8a94a1;font-weight:600;padding:16px 12px 6px}
+.bar{height:6px;border-radius:999px;background:#20252e;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px}
+.ph{display:flex;align-items:center;justify-content:center;border:1px dashed #2e3540;border-radius:12px;background:#12151a;color:#8a94a1;font-size:12.5px}
+</style>
+</helmet>
+<div style="min-height:1500px;display:flex;flex-wrap:wrap;background:#0f1115;color:#e6e8eb;font-family:Inter,system-ui,sans-serif">
+
+<nav aria-label="Menu chính" style="flex:1 1 232px;background:#12151a;border-right:1px solid #1f242c;display:flex;flex-direction:column;padding:18px 12px 14px;gap:4px">
+  <a href="Main.dc.html" style="display:flex;align-items:center;gap:12px;padding:4px 8px 18px;color:#e6e8eb">
+    <img src="/_blob/6cd205f8fe321a7e4fffb9d8fe8fbb9a" alt="" width="36" height="36" style="width:36px;height:36px;border-radius:10px">
+    <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-weight:700;font-size:16px;letter-spacing:-.01em">ZenDojo</span><span class="small dim">Derenツ</span></span>
+  </a>
+  <div class="nav" style="display:flex;flex-direction:column;gap:2px">
+<a href="Main.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a>
+<div class="grp">Thị trường</div>
+<a href="Markets.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span>Markets</span></a>
+<a href="News.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg><span>News</span></a>
+<a href="Earnings.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Earnings</span></a>
+<a href="Econ.dc.html" class="on" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span>Econ Calendar</span></a>
+<div class="grp">Giao dịch</div>
+<a href="TradePlan.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg><span>Trade Plan</span></a>
+<a href="Journal.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 9h6M9 13h4"/></svg><span>Journal</span></a>
+<div class="grp">Học</div>
+<a href="Knowledge.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8l10-4 10 4-10 4z"/><path d="M6 10v5c0 1.8 2.7 3.5 6 3.5s6-1.7 6-3.5v-5"/></svg><span>Knowledge</span></a>
+<div class="grp">Sắp có</div>
+<a href="#" class="soon" aria-disabled="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5M3 16.5l9 4.5 9-4.5"/></svg><span style="flex:1">Options</span><span class="tag">soon</span></a>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;align-items:center;gap:10px;padding:12px 8px 4px;border-top:1px solid #1f242c;margin-top:16px">
+    <span style="width:34px;height:34px;border-radius:50%;background:#3a3326;color:#e8cfa3;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">DE</span>
+    <span style="flex:1;display:flex;flex-direction:column;line-height:1.25;min-width:0"><span style="font-size:13px;font-weight:600">Derenツ</span><span class="small dim">Profile</span></span>
+    <span class="seg" style="padding:2px"><button class="on" type="button" style="min-height:26px;padding:0 8px;font-size:11.5px">VI</button><button type="button" style="min-height:26px;padding:0 8px;font-size:11.5px">EN</button></span>
+  </div>
+</nav>
+<div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column">
+
+<header style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px;padding:12px 32px;border-bottom:1px solid #1f242c;background:#0f1115">
+  <span class="small dim" style="display:flex;align-items:center;gap:6px"><span >Thị trường</span><span style="color:#4a525e">/</span><span style="color:#e6e8eb;font-weight:600">Econ Calendar</span></span>
+  <div style="flex:1"></div>
+  <label class="input" style="width:300px;max-width:100%"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="text" placeholder="Tìm mã, trang, ngày journal…" aria-label="Tìm nhanh"><span class="kbd">⌘K</span></label>
+  <span class="pill" style="height:34px;padding:0 12px;gap:8px"><span class="dot" style="background:#e5534b"></span><span style="color:#e6e8eb">CB Consumer Confidence</span><span class="mono dim">10:00 ET</span><span class="mono" style="color:#ec6a63">18:40</span></span>
+  <span style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2"><span class="mono" style="font-size:14px;font-weight:600;color:#f1f2f4">09:41:20 <span class="dim" style="font-weight:500">ET</span></span><span class="mono small dim">21:41 VN · NY AM</span></span>
+</header>
+<main style="width:100%;max-width:1400px;margin:0 auto;padding:28px 32px 56px;display:flex;flex-direction:column;gap:20px">
+
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div style="display:flex;flex-direction:column;gap:6px"><span class="lbl">Thị trường</span><h1 class="h1">Econ Calendar</h1><p class="sub">Tuần 23–27/11/2026 · giờ hiển thị New York (ET) và Việt Nam</p></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><div class="seg"><button type="button">Ngày</button><button class="on" type="button">Tuần</button></div><button class="icon-btn" type="button" aria-label="Tuần trước"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button class="btn sm" type="button">Tuần này</button><button class="icon-btn" type="button" aria-label="Tuần sau"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
+</div>
+<section class="card" style="padding:14px 18px"><div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+  <span class="lbl">Tác động</span>
+  <div style="display:flex;gap:6px"><button class="chip on" type="button"><span class="dot" style="background:#e5534b"></span>Cao</button><button class="chip on" type="button"><span class="dot" style="background:#f0883e"></span>Trung bình</button><button class="chip" type="button"><span class="dot" style="background:#e3c14d"></span>Thấp</button></div>
+  <span style="width:1px;height:24px;background:#252b34"></span>
+  <span class="lbl">Tiền tệ</span>
+  <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="chip on" type="button">USD</button><button class="chip" type="button">EUR</button><button class="chip" type="button">GBP</button><button class="chip" type="button">JPY</button><button class="chip" type="button">CNY</button><button class="chip" type="button">CAD</button><button class="chip" type="button">AUD</button></div>
+</div></section>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><a href="#" style="background:#161a20;box-shadow:0 0 0 1px #252b34 inset;flex:1 1 120px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;color:#e6e8eb"><span style="display:flex;flex-direction:column;gap:2px"><span class="small dim">T2</span><span class="mono" style="font-size:18px;font-weight:600">23</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dot" style="background:#f0883e"></span><span class="small dim">3 tin</span></span></a><a href="#" style="background:#1e1c17;box-shadow:0 0 0 1px #5a4c33 inset;flex:1 1 120px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;color:#e6e8eb"><span style="display:flex;flex-direction:column;gap:2px"><span class="small dim">T3</span><span class="mono" style="font-size:18px;font-weight:600">24</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dot" style="background:#e5534b"></span><span class="small dim">6 tin</span></span></a><a href="#" style="background:#161a20;box-shadow:0 0 0 1px #252b34 inset;flex:1 1 120px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;color:#e6e8eb"><span style="display:flex;flex-direction:column;gap:2px"><span class="small dim">T4</span><span class="mono" style="font-size:18px;font-weight:600">25</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dot" style="background:#e5534b"></span><span class="small dim">9 tin</span></span></a><a href="#" style="background:#161a20;box-shadow:0 0 0 1px #252b34 inset;flex:1 1 120px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;color:#e6e8eb"><span style="display:flex;flex-direction:column;gap:2px"><span class="small dim">T5</span><span class="mono" style="font-size:18px;font-weight:600">26</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dot" style="background:#8a94a1"></span><span class="small dim">Thanksgiving</span></span></a><a href="#" style="background:#161a20;box-shadow:0 0 0 1px #252b34 inset;flex:1 1 120px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;color:#e6e8eb"><span style="display:flex;flex-direction:column;gap:2px"><span class="small dim">T6</span><span class="mono" style="font-size:18px;font-weight:600">27</span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="dot" style="background:#8a94a1"></span><span class="small dim">Đóng sớm</span></span></a></div>
+<div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:start"><section class="card flush" aria-label="Danh sách tin tuần"><div style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;padding:12px 22px;border-bottom:1px solid #252b34"><span class="lbl" style="">ET</span><span class="lbl" style="">VN</span><span class="lbl" style="">Tiền tệ</span><span class="lbl" style="">Tác động</span><span class="lbl" style="">Sự kiện</span><span class="lbl" style="text-align:right">Thực tế</span><span class="lbl" style="text-align:right">Dự báo</span><span class="lbl" style="text-align:right">Trước</span></div><div style="display:flex;flex-direction:column;padding-bottom:12px"><div style="display:flex;align-items:center;gap:10px;padding:16px 16px 8px"><span class="h3">Thứ Ba 24/11</span><span class="tag acc">Hôm nay</span><span class="small dim">6 tin</span></div><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">08:30</span><span class="mono small dim">20:30</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">TB</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Chicago Fed National Activity</span>
+  <span class="mono small" style="text-align:right;color:#8cc2a4">−0.12</span>
+  <span class="mono small t2" style="text-align:right">−0.05</span>
+  <span class="mono small dim" style="text-align:right">−0.28</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">09:00</span><span class="mono small dim">21:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#e3c14d"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">Thấp</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">S&P/CS Composite-20 HPI y/y</span>
+  <span class="mono small" style="text-align:right;color:#8cc2a4">3.4%</span>
+  <span class="mono small t2" style="text-align:right">3.3%</span>
+  <span class="mono small dim" style="text-align:right">3.6%</span>
+</a><a href="#" class="row-hover" style="background:#1e1c17;box-shadow:0 0 0 1px #5a4c33 inset;display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">10:00</span><span class="mono small dim">22:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span></span><span class="small dim">Cao</span></span>
+  <span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">CB Consumer Confidence</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">98.5</span>
+  <span class="mono small dim" style="text-align:right">97.2</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">10:00</span><span class="mono small dim">22:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">TB</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Richmond Manufacturing Index</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">−4</span>
+  <span class="mono small dim" style="text-align:right">−6</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">13:00</span><span class="mono small dim">01:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#e3c14d"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">Thấp</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">2-Year Note Auction</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">—</span>
+  <span class="mono small dim" style="text-align:right">4.29</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">14:00</span><span class="mono small dim">02:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span></span><span class="small dim">Cao</span></span>
+  <span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">FOMC Meeting Minutes</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">—</span>
+  <span class="mono small dim" style="text-align:right">—</span>
+</a><div style="display:flex;align-items:center;gap:10px;padding:16px 16px 8px"><span class="h3">Thứ Tư 25/11</span><span class="small dim">4 tin</span></div><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">08:30</span><span class="mono small dim">20:30</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span></span><span class="small dim">Cao</span></span>
+  <span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Prelim GDP q/q</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">2.8%</span>
+  <span class="mono small dim" style="text-align:right">2.8%</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">08:30</span><span class="mono small dim">20:30</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span><span style="width:5px;height:14px;border-radius:2px;background:#e5534b"></span></span><span class="small dim">Cao</span></span>
+  <span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Core PCE Price Index m/m</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">0.3%</span>
+  <span class="mono small dim" style="text-align:right">0.3%</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">08:30</span><span class="mono small dim">20:30</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">TB</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Unemployment Claims</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">216K</span>
+  <span class="mono small dim" style="text-align:right">213K</span>
+</a><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">10:00</span><span class="mono small dim">22:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#f0883e"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">TB</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Pending Home Sales m/m</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">−2.0%</span>
+  <span class="mono small dim" style="text-align:right">7.4%</span>
+</a><div style="display:flex;align-items:center;gap:10px;padding:16px 16px 8px"><span class="h3">Thứ Năm 26/11</span><span class="small dim">1 tin</span></div><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">Cả ngày</span><span class="mono small dim"></span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">Nghỉ</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Thanksgiving · thị trường Mỹ đóng cửa</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">—</span>
+  <span class="mono small dim" style="text-align:right">—</span>
+</a><div style="display:flex;align-items:center;gap:10px;padding:16px 16px 8px"><span class="h3">Thứ Sáu 27/11</span><span class="small dim">1 tin</span></div><a href="#" class="row-hover" style="display:grid;grid-template-columns:64px 52px 54px 64px minmax(0,1fr) 78px 78px 78px;gap:10px;align-items:center;padding:10px 16px;border-radius:10px;color:#e6e8eb;margin:0 6px">
+  <span class="mono" style="font-size:13px;font-weight:600">13:00</span><span class="mono small dim">01:00</span>
+  <span class="tag">USD</span>
+  <span style="display:flex;align-items:center;gap:6px"><span style="display:flex;gap:2px"><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span><span style="width:5px;height:14px;border-radius:2px;background:#2e3540"></span></span><span class="small dim">Nghỉ</span></span>
+  <span style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Đóng cửa sớm (cổ phiếu 13:00 ET, CME 13:15 ET)</span>
+  <span class="mono small" style="text-align:right;color:#4a525e">—</span>
+  <span class="mono small t2" style="text-align:right">—</span>
+  <span class="mono small dim" style="text-align:right">—</span>
+</a></div></section><section class="card" aria-label="Chi tiết tin" style="gap:16px">
+  <div style="display:flex;gap:8px;align-items:center"><span class="tag" style="background:#3a1f1d;color:#ec6a63">Tác động cao</span><span class="tag">USD</span></div>
+  <h2 class="h2" style="font-size:20px">CB Consumer Confidence</h2>
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+    <div style="padding:12px;border-radius:10px;background:#12151a"><span class="lbl">Giờ</span><div class="mono" style="font-size:16px;font-weight:600;margin-top:4px">10:00 ET</div><span class="small dim mono">22:00 VN</span></div>
+    <div style="padding:12px;border-radius:10px;background:#1e1c17;box-shadow:0 0 0 1px #3a3326 inset"><span class="lbl">Còn lại</span><div class="mono acc" style="font-size:16px;font-weight:600;margin-top:4px">18:40</div><span class="small dim">trong cửa sổ NY AM</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center">
+    <div><span class="lbl">Thực tế</span><div class="mono" style="font-size:18px;margin-top:4px;color:#4a525e">—</div></div>
+    <div><span class="lbl">Dự báo</span><div class="mono" style="font-size:18px;margin-top:4px">98.5</div></div>
+    <div><span class="lbl">Trước</span><div class="mono dim" style="font-size:18px;margin-top:4px">97.2</div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px"><div class="ch"><span class="lbl">6 kỳ gần nhất</span><span class="small dim" style="display:flex;gap:10px"><span><span class="dot" style="background:#2e3540"></span> Dự báo</span><span><span class="dot" style="background:#8cc2a4"></span> Thực tế</span></span></div><div style="display:flex;gap:6px" role="img" aria-label="So sánh thực tế và dự báo 6 kỳ"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:flex;gap:3px;align-items:flex-end;height:90px"><span style="width:12px;height:40px;border-radius:3px 3px 1px 1px;background:#2e3540"></span><span style="width:12px;height:32px;border-radius:3px 3px 1px 1px;background:#e0947c"></span></div><span class="small dim">T6</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:flex;gap:3px;align-items:flex-end;height:90px"><span style="width:12px;height:43px;border-radius:3px 3px 1px 1px;background:#2e3540"></span><span style="width:12px;height:46px;border-radius:3px 3px 1px 1px;background:#8cc2a4"></span></div><span class="small dim">T7</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:flex;gap:3px;align-items:flex-end;height:90px"><span style="width:12px;height:48px;border-radius:3px 3px 1px 1px;background:#2e3540"></span><span style="width:12px;height:60px;border-radius:3px 3px 1px 1px;background:#8cc2a4"></span></div><span class="small dim">T8</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:flex;gap:3px;align-items:flex-end;height:90px"><span style="width:12px;height:63px;border-radius:3px 3px 1px 1px;background:#2e3540"></span><span style="width:12px;height:39px;border-radius:3px 3px 1px 1px;background:#e0947c"></span></div><span class="small dim">T9</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:flex;gap:3px;align-items:flex-end;height:90px"><span style="width:12px;height:43px;border-radius:3px 3px 1px 1px;background:#2e3540"></span><span style="width:12px;height:84px;border-radius:3px 3px 1px 1px;background:#8cc2a4"></span></div><span class="small dim">T10</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="display:flex;gap:3px;align-items:flex-end;height:90px"><span style="width:12px;height:56px;border-radius:3px 3px 1px 1px;background:#2e3540"></span><span style="width:12px;height:32px;border-radius:3px 3px 1px 1px;background:#e0947c"></span></div><span class="small dim">T11</span></div></div></div>
+  <p class="small muted" style="line-height:1.6">Khảo sát niềm tin người tiêu dùng của Conference Board. Cao hơn dự báo thường hỗ trợ USD.</p>
+  <div style="padding:12px;border-radius:10px;background:#12151a;display:flex;flex-direction:column;gap:6px"><span class="lbl">NQ sau tin · 6 kỳ</span><span class="small t2">Biên độ 15 phút sau tin trung bình <span class="mono" style="font-weight:600">±38 điểm</span></span><span class="small dim">Tính từ journal + nến M1 lưu riêng [đề xuất]</span></div>
+</section></div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

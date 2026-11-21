@@ -8,19 +8,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@mozilla/readability": "0.6.0",
     "@resvg/resvg-js": "2.6.2",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.119.0",
+    "linkedom": "0.18.15",
     "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "sharp": "^0.35.5"
+    "sanitize-html": "2.18.2",
+    "sharp": "^0.35.5",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "typescript": "7.0.2"
+    "@types/sanitize-html": "2.16.2",
+    "typescript": "7.0.2",
+    "vitest": "^4.1.12"
   }
 }

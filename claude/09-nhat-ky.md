@@ -2,7 +2,108 @@
 
 Ghi theo ngày, mới nhất ở trên. Chi tiết từng commit: `git log`.
 
+## 2026-11-21 · UI v3 (nhánh `feat/ui-v3`)
+- Bản thiết kế chép từ canvas vào `docs/design/v3/` (11 bảng). D59 IA mới, D60 Markets đa tài sản qua ETF, D61 Knowledge native.
+- Shell: sidebar Dashboard riêng + Thị trường / Giao dịch / Học / Sắp có, PnL vào Journal; topbar breadcrumb + ⌘K + tin đỏ + đồng hồ NY / VN + tên phiên; tab bar mobile mới.
+- Dashboard: SessionTimeline (dải phiên, chấm tin, vạch now, 5 mốc), Plan hôm nay (thang level + dải HVN + vạch 9:29, kịch bản A / B từ summary, Checklist10 localStorage theo ngày), Kỷ luật phiên (SETTINGS.dailyLossLimit / trailingDrawdown = null → "chưa đặt"), Tin hôm nay + dải tuần + nghỉ lễ, Journal 5 phiên (cột PnL), Earnings tuần, Tin nổi bật. Bỏ Watchlist.
+- Markets: 6 tab; Tổng quan = phiên Tokyo / London / NY, hiệu suất liên thị trường (DivergingBar), 4 thẻ nhóm, heatmap S&P 500 / NQ 100 + biến động mạnh, chỉ số toàn cầu. Giá qua ETF đại diện (`lib/markets/provider.ts`), chỉ 1D.
+- Journal: layout có PageHead + tab; `/journal/stats` mới; lịch mini; chip cho lựa chọn ≤ 6; nút Lưu ⌘S portal lên PageHead; PnL 6 thẻ (net, win rate, expectancy, profit factor, R TB thắng / thua, max DD) + đường vốn + expectancy theo setup (`tradeStats`, có test).
+- Trade Plan: server render ảnh + bảng level + Bias + kịch bản + checklist + lịch sử; Gửi JSON tay trong `<dialog>`.
+- News: seg Tất cả / Theo dõi (lọc mã NQ top) / Đã lưu (chờ migration nháp). Earnings, Econ Calendar: PageHead v3. Knowledge: hub v3 + kiểm kê.
+- Kiểm: `tsc`, `biome ci`, Vitest 59 test, `check-plan-core`, `next build` pass; xem bằng trình duyệt với mock (Dashboard, Markets, Journal 3 tab, Trade Plan + drawer).
+
+## 2026-11-21 · Tối ưu giao diện (nhóm A tốc độ cảm nhận + nhóm B a11y, theme theo brand kit)
+- A: `app/(desk)/loading.tsx` (skeleton, `_components/Skeleton.tsx`) + `error.tsx` (tiếng Việt, nút Thử lại, chỉ hiện digest). Dashboard tách watchlist / earnings tuần / news thành `dashboard/MarketCards.tsx` bọc `<Suspense>`; News đọc bài trong Suspense; Markets stream phần dữ liệu; Journal tải ảnh song song; Trade Plan nạp sẵn lịch sử tháng ở server. Page journal / PnL / Trade Plan gọi `requireOwner` trước khi đọc DB.
+- Đo local (mock Finnhub chậm 2 s): Dashboard byte đầu 0,25 s (trước chờ hết ~2,3 s), Markets 0,04 s (trước ~8 s). Xem bằng trình duyệt: Dashboard / Journal / Trade Plan / Markets đúng, không lỗi console, 390 px không tràn ngang.
+- B · theme: `:root` thêm token từ brand kit (`--imp-*`, `--ink`, `--ridge*`) + token ngữ nghĩa `--hover`, `--text-strong`, `--on-accent` thay 25 mã hex viết cứng. Tương phản: `--faint` #7d8794 → #848e9b (4.6:1 trên panel-3), chữ tin đỏ dùng `--imp-high-text` #ec6a63 (5:1), viền ô nhập `--field-line` #5e6774 (3:1), placeholder → `--faint`, ô Earnings trống → `--faint`. Thêm `prefers-reduced-motion`.
+- B · a11y: `type` cho 60 nút (4 nút submit trong form), key ổn định cho lệnh journal (trước dùng index), PnL, thang level, bước gửi plan; palette bỏ listbox chứa nút; `aria-label` đặt đúng phần tử. Biome: rule a11y / correctness về mức error, `useSemanticElements` tắt (role="group" hợp lệ).
+
+## 2026-11-21 · Tối ưu đợt 1 (audit hạng 1–14, nhánh `chore/optimize-2026-11`)
+- Audit: `claude/11-audit-2026-11.md`. Bundle client đã nhỏ (~160 KB gzip / trang desk, không đổi sau đợt này); chỗ chậm nằm ở server.
+- Test & CI: Vitest (57 test: plan-core 12/11 + 7 biến thể, journal, lịch kinh tế, giờ ET/VN qua DST, `lib/api` + schema); Biome (format 1 commit riêng, lỗi lint cũ để `warn`); `.github/workflows/ci.yml`. Lệnh: `pnpm test`, `pnpm lint`, `pnpm format`.
+- Hiệu năng: timeout Finnhub / ForexFactory / Supabase / Discord; Finnhub key qua header `X-Finnhub-Token`, retry 1 lần khi 429, tối đa 8 lệnh quote / 4 lệnh earnings cùng lúc; `cache()` cho `getClaims` / `getViewer`; layout desk chạy song song; `next/font` thay `<link>` Google Fonts.
+- API: `lib/api.ts` (`json`, `fail`, `requireOwnerApi`, `requireViewerApi`, `tokenEquals` băm SHA-256 + `timingSafeEqual`, `crossOrigin`, `readJson`), `lib/schemas.ts` (zod JSON v1 `.loose`, journal, members). Lỗi `{ ok:false, error, code }`, **giữ nguyên chuỗi `error`**. Ghi bằng cookie phải cùng Origin. Body tối đa: plan 2 MB, journal 1 MB.
+- Bảo mật: `X-Frame-Options: SAMEORIGIN`, `Permissions-Policy`, HSTS, CSP Report-Only.
+- Dọn: export / hàm chết (knip), `lib/num.ts`, `metadataBase`, proxy dùng `lib/env`.
+- Kiểm: `next build` OK, `check-plan-core` OK, smoke test `next start` + Supabase giả: POST JSON 12/11 → 200, payload lưu nguyên vẹn, ảnh 101 834 byte như trước; 401 / 400 / 405 đúng chuỗi cũ; trang học 200.
+
+## 2026-11-21 · Chẩn đoán Plan Sender (log máy ATAS + Supabase + Vercel)
+- 17/11 21:31–21:40 VN: log không có dòng `web:` → "Gửi lên web" chưa bật / URL mẫu, indicator bỏ qua im lặng. 21:41 và 21:43 đã `HTTP 200` nhưng vào project Supabase cũ (Sydney); project Singapore tạo lúc 22:45 VN nên "không thấy POST". Dòng 17/11 hiện có là bản gửi lại qua Plan Builder 18/11.
+- 19/11 9:29 ET: đầu-cuối chạy (`HTTP 200`, dòng DB, ảnh `2026/11/19/plan/plan_2026-11-19_NQ.webp`, `discord.sent:true`) nhưng 2 POST (bấm tay + tự gửi) → 2 tin Discord; chart Price scale 4 → tick 4, row 16, cả `periods_hl` bị làm tròn 4 điểm → số 19/11 sai.
+- Domain cũ trả 307 sang `zendojo-deren.vercel.app`; indicator vẫn trỏ domain cũ → lần gửi tới sẽ `401` (.NET bỏ `Authorization` khi redirect).
+- `/api/plan`: chống Discord trùng (cùng ngày + symbol + cùng số liệu, bỏ qua `trigger` / `ts_et`, trong 120 giây → `discord: {sent:false, skipped:"duplicate"}`); đẩy `warnings` của indicator vào tin Discord và response. `tsc` + `check-plan-core` OK.
+- Tài liệu: `docs/plan-sender/PROMPT_PlanSender_fix-2026-11-21.md` (sửa indicator trên máy), README mục "Cấu hình bắt buộc", `dashboard-setup.md` (307, Price scale).
+- Supabase: không có dữ liệu test (chỉ 2 dòng thật 17/11, 19/11 + 2 ảnh); `rls_auto_enable` đã thu quyền anon / authenticated.
+
+## 2026-11-21 · Đối chiếu trạng thái, ship dashboard, log phiên vào Journal
+- Kiểm thật: production còn ở PR #3; Preview `development` READY; domain mới + redirect 307 đã chạy; `journal_images` chưa áp; thiếu `COINGECKO_API_KEY`.
+- Chốt đợt đang làm: nghiệm thu + PR `development` → `production`. Ghi phương án T12 (log phiên → cột trong `journal_entries`, khoá localStorage `cb-log`) vào `08`.
+- Áp migration `journal_images` (file đổi tên `20261121073856_…` cho khớp version).
+- T12 (D51): migration `20261121074126_journal_session_log` + thẻ Log phiên trong Journal, cột Setup, thống kê khung Composite (Wilson 95%). Thống kê journal lấy 20 ngày, thống kê khung lấy tới 250 ngày.
+- D52: dừng duy trì artifact claude.ai.
+
+## 2026-11-20 · Dự án đổi tên thành ZenDojo (D50)
+- Code và tài liệu dùng tên mới: `package.json` (`zendojo`), `supabase/config.toml` (`project_id`), `CLAUDE.md`, `claude/01`, `02`, `04`, `08`, prompt chuyển đổi, subagent, hook SessionStart, artifact (domain mới, build lại `app.js`).
+- `docs/dashboard-setup.md`: thêm checklist đổi tên trên GitHub, Vercel, Supabase, Discord, ATAS. Domain chính mới `zendojo-deren.vercel.app` (`zendojo.vercel.app` đã có người dùng).
+
+## 2026-11-19 · Brand kit ZenDojo
+- Logo có 3 dạng (vuông bo góc, tròn góc trong suốt, không nền) + avatar tràn nền. Đã thử biến thể `[ツ]` và con dấu son rồi bỏ theo ý Deren: chỉ giữ ensō + ツ; nền login / điện thoại bỏ con dấu ở góc.
+- Thêm bộ hình nền lấy ㋡ làm hình chính (`05-backgrounds/tsu/`: 5K / 4K / QHD / 16:10, điện thoại, biểu ngữ server + hồ sơ Discord) và biểu ngữ hồ sơ Discord 2040×720 cho bộ nền núi.
+- `scripts/zendojo-brand/kit.mjs` + `kit.py` đóng gói ZenDojo-brand-kit.zip (~13 MB, ~60 file): logo SVG + PNG tới 4096 (3 dạng), logo kèm chữ (4×, nền tối / trong suốt), avatar 1024 / 2048, favicon.ico + PNG 16–1024 + maskable, hình nền 5K / 4K / QHD / 16:10 / điện thoại / banner Discord, OG 2400×1260, minh hoạ, bảng màu + `tokens.css` / `tokens.json` / màu ATAS ARGB, README. Kit không commit (file lớn), sinh lại bằng lệnh trong `scripts/zendojo-brand/README-kit.md`.
+
+## 2026-11-19 · ZenDojo (D49)
+- Đổi tên Deren Desk → ZenDojo: `layout.tsx` (title, icon, apple icon, Open Graph / Twitter), sidebar, login, mobile topbar, News; câu EN mới.
+- Logo làm 2 vòng theo góp ý: bản đầu ensō nét đều → Deren muốn "vết mực quẹt, kiểu Nhật" + "thêm tý công nghệ". Bản chốt: ensō mô phỏng ~75 sợi lông bút gom thành búi (khe khô dọc nét, đầu nét xoè, đuôi mảnh), lát glitch bằng `clipPath` + `<use>` dịch ngang, khe scanline bằng `mask`, đuôi tan thành pixel bám lưới; chữ ツ bút lông màu cát.
+- Ảnh trong `apps/web/public/assets/img/zendojo/`: `icon-32/180/192/512.png`, `login-bg.webp` (26 KB), `empty.webp`, `og.png` (Playwright, font Inter + Noto CJK). Nguồn: `scripts/zendojo-brand/` (`ink.py`, `build.py`, `raster.mjs`, `og.html`). Xoá `desk-login-bg.svg`. Trang học cũ (`/learn`) giữ icon cũ.
+- Minh hoạ ở Dashboard (chưa có plan / cuối tuần) và trang 404 mới `app/not-found.tsx`.
+- Test mock: build OK, login / Dashboard / 404 ở 1440 px và 390 px không tràn ngang, thẻ og:image và icon đúng đường dẫn.
+
+## 2026-11-19 · Khách (D48)
+- Đợt 2: danh sách khách chuyển từ biến `DESK_GUEST_DISCORD_IDS` sang bảng `access.members` (schema riêng `access`, tách khỏi `trading`; migration `20261119071248_access_members`, test Postgres 16 local: check constraint, trigger `approved_at`, anon / authenticated bị chặn ở mức schema; `lib/db.ts` có `dbSchema(schema)`; đã áp lên Supabase version `20261119071248`; advisor chỉ còn INFO "RLS bật, không policy" như các bảng trading). Callback ghi yêu cầu pending; Profile có khung **Khách truy cập** (duyệt / từ chối / gỡ quyền / thêm bằng ID), `/api/members`. Cache kiểm khách đặt trên `globalThis` để gỡ quyền có hiệu lực ngay (route API và trang là 2 module riêng).
+- `lib/auth.ts`: `getViewer` / `requireViewer` (chủ sở hữu + khách), `requireOwner` đưa khách về `/dashboard`; callback đánh dấu `desk_guest`; proxy chặn khách ở `/trade-plan`, `/journal*`; thêm layout chỉ chủ sở hữu cho 2 trang này.
+- Khách: sidebar / tab mobile / palette ẩn Trade Plan, Journal, PnL; Dashboard không đọc plan / journal; Profile ẩn thiết lập giao dịch + kết nối.
+- Test mock: khách vào 9 trang thị trường (200), 3 trang giao dịch → `/dashboard`, `/api/journal` + `/api/plan` 401; khách bị gỡ khỏi danh sách → về `/login`; chủ sở hữu không đổi.
+
+## 2026-11-19 · Dashboard đợt 5 (code ý tưởng canvas v2)
+- Shell v2: `Topbar`, `Palette` (Ctrl/Cmd+K), thanh tab mobile; bỏ session khỏi `lib/settings.ts`, `EventRow`, timeline (D47).
+- Markets mới (`lib/markets.ts`, `/markets`, D46); `/api/stock/summary` cho ngăn tóm tắt ở Earnings; proxy thêm `/markets`, `/api/stock`.
+- Dashboard: watchlist (`getQuotes`), earnings tuần, journal mini, thang level plan. Calendar tuần dạng cột, News cột lọc, trang mã chia tab, Journal recap theo tab. 72 câu EN mới.
+- Test mock (Finnhub + CoinGecko giả): build OK, desktop 1600 px / mobile 390 px không tràn ngang, không lỗi console; palette gõ "nvda" + Enter mở `/stock/NVDA`. Sửa CSS thứ tự: topbar ẩn và tab dưới hiện ở ≤ 860 px.
+
+## 2026-11-19 · Dashboard đợt 4 (9 góp ý)
+- Layout vừa khung cho Calendar / Earnings / News; sửa lỗi phần đầu trang bị co lại khi trang dài (`.main > *` không co); Journal đưa nút lưu lên đầu.
+- Trang Stocks mới (D44), Knowledge nhúng khoá học cũ (D45): `core.js` v21, `app.css` v19, chạy lại `i18n/build_en.py`.
+- Timeline: mốc giờ cũ chia đều nên chấm tin lệch so với nhãn (14:00 nằm ở 83% nhưng nhãn ở 86%) → đặt mốc theo trục thật.
+- Test mock: 12 trang × desktop 1600 px / mobile 390 px không tràn ngang, không lỗi console; iframe khoá học tự cao theo nội dung.
+
+## 2026-11-18 · Dashboard đợt 3 (6 góp ý)
+- Calendar xem cả tuần; Earnings thành lịch tháng; News 20 bài + trình đọc trong app (D42, thư viện mới `@mozilla/readability` 0.6.0, `linkedom` 0.18.15, `sanitize-html` 2.18.2); Journal có ảnh lệnh (D43); sidebar thu gọn hết giật khi rê chuột; lưới các trang đều hơn.
+- Migration `20261118120000_journal_images` test trên Postgres 16 local (trigger `day_id`, anon bị chặn); chưa áp lên Supabase.
+- Test local với mock: tải ảnh 3000×1600 PNG → WebP 2560 px, sửa ghi chú / gắn lệnh, xoá (cả file Storage), khách 401; trình đọc lọc `<script>` / `onerror`, link tuyệt đối mở tab mới, redirect về 127.0.0.1 bị chặn; không tràn ngang ở 1440 px và 390 px.
+
+## 2026-11-18 · Dashboard đợt 2 (13 góp ý sau test preview)
+- Giao diện: scrollbar mảnh, sidebar ghim / thu gọn (cookie `desk_side`), mobile có thanh trên + ngăn kéo, lưới Dashboard co về 1 cột dưới 1100 px.
+- VI / EN (cookie `desk_lang`, từ điển `lib/i18n-en.ts`), múi giờ hiển thị (cookie `desk_tz`); Calendar nhóm ngày theo múi giờ chọn. Giải thích lệch ngày FOMC: feed ForexFactory là giờ ET (14:00 ET Thứ 4), trang forexfactory.com xem ở VN hiện 02:00 Thứ 5.
+- Trade Plan (đổi tên), `/api/plan/image` + nút Copy ảnh; Journal có tab PnL Calendar; News / Earnings (Finnhub); bỏ thẻ Journal ở Dashboard.
+- Migration `20261118090014_trade_days_hub` (D39) test trên Postgres 16 local: backfill, trigger `day_id`, upsert kiểu production cũ, `save_journal`, tag n:n, anon bị chặn. Đã áp lên Supabase (version `20261118090014`). News / Earnings bật lại sau khi Deren thêm `FINNHUB_API_KEY`.
+
+## 2026-11-18 · Code dashboard Deren Desk
+- Chỉnh sau test preview: sidebar đứng yên, chỉ vùng nội dung cuộn (desktop); lịch kinh tế màu theo ForexFactory (đỏ / cam / vàng / xám), lấy mọi currency, bộ lọc Mức tác động + Currencies lưu trong cookie `desk_econ` dùng chung Calendar và Dashboard (mặc định USD, mọi mức).
+- Next.js: `app/(desk)/` (dashboard, calendar, studio, journal, pnl, knowledge, profile), `app/login`, `app/auth/*`, `proxy.ts` (Next 16), `app/desk.css`. Thư viện mới: `@supabase/ssr` 0.12.7, `@supabase/supabase-js` 2.119.0.
+- Đăng nhập Discord một người (D38). `/api/plan` nhận thêm phiên đăng nhập (ngoài `PLAN_TOKEN`) và `?month=`; token sai vẫn 401.
+- Migration `20261118075449_journal_days_trades`, test trên Postgres 16 local (check constraint, cascade, anon bị chặn) rồi áp lên Supabase production; advisor chỉ còn INFO "RLS bật, không policy" (cố ý, chỉ server đọc ghi).
+- Lịch kinh tế: feed tuần của ForexFactory, lọc USD, cache 15 phút (`lib/econ.ts`).
+- `/` thành cửa vào dashboard (proxy: có phiên chủ sở hữu → `/dashboard`, chưa → `/login`); trang chủ học cũ chuyển sang `/learn`, `/index.html` → `/learn` (redirect tạm, không permanent).
+- Test local với Supabase giả: chưa đăng nhập / tài khoản lạ bị chuyển về `/login`, các trang 200, lưu journal + PnL khớp (+$338.8), ATAS token vẫn dùng được.
+
+## 2026-11-18 · Thiết kế dashboard mới (Deren Desk)
+- Canvas thiết kế 7 màn hình: Login (chỉ Discord, hình nền riêng), Profile, Dashboard, Plan Studio (có lịch sử theo ngày), Journal (có các ô recap chữ), PnL Calendar, Knowledge (AMT → Context → Entry). Link và việc cần làm ghi ở [08-roadmap.md](08-roadmap.md) mục "Dashboard mới".
+- Chỉnh tiếp: lịch tháng tách sang trang Calendar (Dashboard còn tin hôm nay + dải tuần), menu Knowledge gộp một mục có 3 tab, bảng lệnh journal thêm số hợp đồng / PnL $ / phí / net, thêm bảng mẫu trạng thái trống và lỗi.
+- Economic calendar chỉ gọi API, không lưu database (D37).
+- Chốt hướng: chỉ một tài khoản Discord của Deren được đăng nhập; lịch sử plan theo ngày cần thêm query danh sách ngày phía server (ghi vào roadmap, làm sau).
+
 ## 2026-11-18 · Nút gửi plan + log API
+- Test production thành công: database + Storage (WebP 118 KB) + Discord. Hai lỗi gặp trên đường: secret key trên Vercel không hợp lệ (401 REST + 400 Storage thiếu authorization) → tạo key mới + redeploy; schema `trading` chưa expose (406 PGRST106) → thêm vào Data API (Dashboard: Integrations → Data API → Settings).
 - Plan Builder có nút **Gửi plan lên web** (tuỳ chọn kèm Discord), hiện kết quả từng bước (database / ảnh / Discord) và lý do lỗi (401 token theo domain, 500 thiếu biến môi trường ở preview, 502 Supabase).
 - `/api/plan` ghi log từng bước vào Vercel Runtime Logs (`[api/plan] ...`, không ghi token / key / webhook).
 

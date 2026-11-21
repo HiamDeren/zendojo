@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Bài học · Level map</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0f1115;color:#e6e8eb;font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#d4b483;text-decoration:none}a:hover{color:#e8cfa3}
+*{box-sizing:border-box}
+h1,h2,h3,h4,p{margin:0}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.long{color:#8cc2a4}.short{color:#e0947c}.acc{color:#d4b483}.dim{color:#8a94a1}.muted{color:#aeb6c0}.t2{color:#c9ced5}
+.card{background:#161a20;border:1px solid #252b34;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.card.flush{padding:0;gap:0;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:24px}
+.lbl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a94a1;font-weight:600}
+.h1{font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.02em;color:#f1f2f4}
+.h2{font-size:18px;line-height:1.3;font-weight:650;letter-spacing:-.01em;color:#f1f2f4}
+.h3{font-size:15px;font-weight:600;color:#e6e8eb}
+.sub{font-size:14px;color:#aeb6c0}
+.small{font-size:12.5px}
+.link{font-size:12.5px;font-weight:600;color:#d4b483;display:inline-flex;align-items:center;gap:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border-radius:10px;border:1px solid #2e3540;background:#1a1e25;color:#e6e8eb;font:600 13.5px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#20252e;color:#e6e8eb}
+.btn.primary{background:#d4b483;border-color:#d4b483;color:#14161a}
+.btn.primary:hover{background:#e8cfa3;color:#14161a}
+.btn.sm{min-height:34px;padding:0 12px;font-size:12.5px;border-radius:8px}
+.btn.ghost{background:transparent;border-color:transparent;color:#aeb6c0}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid #252b34;background:#161a20;color:#c9ced5;cursor:pointer}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;border:1px solid #2e3540;background:#1a1e25;font-size:12px;font-weight:600;color:#c9ced5;white-space:nowrap}
+.pill.long{background:#17231d;border-color:#2b4537;color:#8cc2a4}
+.pill.short{background:#281d1a;border-color:#4a2f28;color:#e0947c}
+.pill.acc{background:#1e1c17;border-color:#5a4c33;color:#d4b483}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:6px;background:#20252e;color:#c9ced5;font-size:11px;font-weight:600;letter-spacing:.02em}
+.tag.acc{background:#3a3326;color:#e8cfa3}
+.tag.long{background:#17231d;color:#8cc2a4}.tag.short{background:#281d1a;color:#e0947c}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+.seg{display:inline-flex;gap:2px;padding:3px;border-radius:11px;background:#12151a;border:1px solid #252b34}
+.seg a,.seg button{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 14px;border-radius:8px;border:0;background:transparent;color:#aeb6c0;font:600 13px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.seg .on{background:#20252e;color:#f1f2f4;box-shadow:0 0 0 1px #2e3540 inset}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #252b34}
+.tabs a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;color:#aeb6c0;font-size:14px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs a.on{color:#f1f2f4;border-bottom-color:#d4b483}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 12px;border-radius:999px;border:1px solid #2e3540;background:transparent;color:#c9ced5;font:500 12.5px Inter,system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.chip.on{background:#1e1c17;border-color:#5a4c33;color:#e8cfa3}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8a94a1;font-weight:600;text-align:left;padding:10px 12px;border-bottom:1px solid #252b34;white-space:nowrap}
+.tbl td{padding:11px 12px;border-bottom:1px solid #1f242c;color:#c9ced5;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .r{text-align:right}
+.row-hover:hover{background:#1a1e25}
+.input{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:10px;border:1px solid #5e6774;background:#12151a;color:#8a94a1;font-size:13px}
+.input input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#e6e8eb;font:13px Inter,system-ui,sans-serif}
+.kbd{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 6px;border-radius:5px;border:1px solid #2e3540;color:#aeb6c0;background:#1a1e25}
+.nav a{display:flex;align-items:center;gap:12px;min-height:40px;padding:0 12px;border-radius:10px;color:#aeb6c0;font-size:14px;font-weight:500}
+.nav a:hover{background:#1a1e25;color:#e6e8eb}
+.nav a.on{background:#1e1c17;color:#f1f2f4;box-shadow:0 0 0 1px #3a3326 inset}
+.nav a.on svg{color:#d4b483}
+.nav .soon{opacity:.62}
+.grp{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8a94a1;font-weight:600;padding:16px 12px 6px}
+.bar{height:6px;border-radius:999px;background:#20252e;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px}
+.ph{display:flex;align-items:center;justify-content:center;border:1px dashed #2e3540;border-radius:12px;background:#12151a;color:#8a94a1;font-size:12.5px}
+</style>
+</helmet>
+<div style="min-height:2300px;display:flex;flex-wrap:wrap;background:#0f1115;color:#e6e8eb;font-family:Inter,system-ui,sans-serif">
+
+<nav aria-label="Menu chính" style="flex:1 1 232px;background:#12151a;border-right:1px solid #1f242c;display:flex;flex-direction:column;padding:18px 12px 14px;gap:4px">
+  <a href="Main.dc.html" style="display:flex;align-items:center;gap:12px;padding:4px 8px 18px;color:#e6e8eb">
+    <img src="/_blob/6cd205f8fe321a7e4fffb9d8fe8fbb9a" alt="" width="36" height="36" style="width:36px;height:36px;border-radius:10px">
+    <span style="display:flex;flex-direction:column;line-height:1.2"><span style="font-weight:700;font-size:16px;letter-spacing:-.01em">ZenDojo</span><span class="small dim">Derenツ</span></span>
+  </a>
+  <div class="nav" style="display:flex;flex-direction:column;gap:2px">
+<a href="Main.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Dashboard</span></a>
+<div class="grp">Thị trường</div>
+<a href="Markets.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span>Markets</span></a>
+<a href="News.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg><span>News</span></a>
+<a href="Earnings.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20"/><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Earnings</span></a>
+<a href="Econ.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg><span>Econ Calendar</span></a>
+<div class="grp">Giao dịch</div>
+<a href="TradePlan.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg><span>Trade Plan</span></a>
+<a href="Journal.dc.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 9h6M9 13h4"/></svg><span>Journal</span></a>
+<div class="grp">Học</div>
+<a href="Knowledge.dc.html" class="on" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 8l10-4 10 4-10 4z"/><path d="M6 10v5c0 1.8 2.7 3.5 6 3.5s6-1.7 6-3.5v-5"/></svg><span>Knowledge</span></a>
+<div class="grp">Sắp có</div>
+<a href="#" class="soon" aria-disabled="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 4.5-9 4.5-9-4.5z"/><path d="M3 12l9 4.5 9-4.5M3 16.5l9 4.5 9-4.5"/></svg><span style="flex:1">Options</span><span class="tag">soon</span></a>
+  </div>
+  <div style="flex:1"></div>
+  <div style="display:flex;align-items:center;gap:10px;padding:12px 8px 4px;border-top:1px solid #1f242c;margin-top:16px">
+    <span style="width:34px;height:34px;border-radius:50%;background:#3a3326;color:#e8cfa3;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">DE</span>
+    <span style="flex:1;display:flex;flex-direction:column;line-height:1.25;min-width:0"><span style="font-size:13px;font-weight:600">Derenツ</span><span class="small dim">Profile</span></span>
+    <span class="seg" style="padding:2px"><button class="on" type="button" style="min-height:26px;padding:0 8px;font-size:11.5px">VI</button><button type="button" style="min-height:26px;padding:0 8px;font-size:11.5px">EN</button></span>
+  </div>
+</nav>
+<div style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column">
+
+<header style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-height:64px;padding:12px 32px;border-bottom:1px solid #1f242c;background:#0f1115">
+  <span class="small dim" style="display:flex;align-items:center;gap:6px"><span >Học</span><span style="color:#4a525e">/</span><span >Knowledge</span><span style="color:#4a525e">/</span><span >TPO Level Playbook</span><span style="color:#4a525e">/</span><span style="color:#e6e8eb;font-weight:600">04 · Level map</span></span>
+  <div style="flex:1"></div>
+  <label class="input" style="width:300px;max-width:100%"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="text" placeholder="Tìm mã, trang, ngày journal…" aria-label="Tìm nhanh"><span class="kbd">⌘K</span></label>
+  <span class="pill" style="height:34px;padding:0 12px;gap:8px"><span class="dot" style="background:#e5534b"></span><span style="color:#e6e8eb">CB Consumer Confidence</span><span class="mono dim">10:00 ET</span><span class="mono" style="color:#ec6a63">18:40</span></span>
+  <span style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2"><span class="mono" style="font-size:14px;font-weight:600;color:#f1f2f4">09:41:20 <span class="dim" style="font-weight:500">ET</span></span><span class="mono small dim">21:41 VN · NY AM</span></span>
+</header>
+<main style="width:100%;max-width:1400px;margin:0 auto;padding:28px 32px 56px;display:flex;flex-direction:column;gap:20px">
+
+<div style="display:grid;grid-template-columns:250px minmax(0,1fr) 230px;gap:32px;align-items:start"><aside style="display:flex;flex-direction:column;gap:16px">
+  <a class="link" href="Knowledge.dc.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg> Knowledge</a>
+  <section class="card" style="padding:12px;gap:2px">
+    <div style="padding:6px 12px 12px;display:flex;flex-direction:column;gap:8px"><span class="lbl">Khoá học</span><span class="h3">TPO Level Playbook</span><div class="bar"><i style="width:44%;background:#d4b483"></i></div><span class="small dim">4 / 9 chương</span></div>
+    <a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#c9ced5"><span class="mono small dim" style="width:20px">00</span><span style="font-size:13.5px;flex:1">Tổng quan</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8cc2a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#c9ced5"><span class="mono small dim" style="width:20px">01</span><span style="font-size:13.5px;flex:1">TPO là gì, đọc profile</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8cc2a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#c9ced5"><span class="mono small dim" style="width:20px">02</span><span style="font-size:13.5px;flex:1">Day type, open type, value</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8cc2a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#c9ced5"><span class="mono small dim" style="width:20px">03</span><span style="font-size:13.5px;flex:1">Initial Balance</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8cc2a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></a><a href="#" aria-current="page" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;background:#1e1c17;box-shadow:0 0 0 1px #3a3326 inset;color:#f1f2f4"><span class="mono small acc" style="width:20px">04</span><span style="font-size:13.5px;font-weight:600;flex:1">Level map</span></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#aeb6c0"><span class="mono small dim" style="width:20px">05</span><span style="font-size:13.5px;flex:1">VWAP RTH</span></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#aeb6c0"><span class="mono small dim" style="width:20px">06</span><span style="font-size:13.5px;flex:1">EMA 9 / 34</span></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#aeb6c0"><span class="mono small dim" style="width:20px">07</span><span style="font-size:13.5px;flex:1">CVD divergence</span></a><a href="#" class="row-hover" style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:10px;color:#aeb6c0"><span class="mono small dim" style="width:20px">08</span><span style="font-size:13.5px;flex:1">Lên plan</span></a>
+  </section>
+</aside><article style="display:flex;flex-direction:column;gap:28px;max-width:760px;width:100%;margin:0 auto">
+  <header style="display:flex;flex-direction:column;gap:12px">
+    <span class="lbl acc">Chương 04 · Level map</span>
+    <h1 style="font-size:34px;line-height:1.2;font-weight:700;letter-spacing:-.02em;color:#f1f2f4">Level nào đáng vẽ, level nào đáng trade, và khi nào level “hỏng”</h1>
+    <span class="small dim" style="display:flex;gap:12px;flex-wrap:wrap"><span>Đọc 12 phút</span><span>·</span><span>5 câu quiz cuối bài</span><span>·</span><span>Phần 2 · Context</span></span>
+  </header>
+  <p style="font-size:16px;line-height:1.75;color:#c9ced5">Mỗi ngày bạn chỉ có 2–3 lệnh, nên số level phải ít và có thứ bậc. Quy tắc: chỉ <b style="color:#f1f2f4">vẽ Tier 1–3 trên chart RTH</b>. Tier 4 (scalping) là tuỳ chọn, chỉ bật khi đã có 20 phiên liên tiếp tuân thủ plan.</p>
+
+  <section id="thu-bac" style="display:flex;flex-direction:column;gap:14px">
+    <h2 class="h2" style="font-size:22px">1 · Thứ bậc level</h2>
+    <div class="card flush" style="overflow-x:auto"><table class="tbl" style="font-size:13px"><thead><tr><th>Tier</th><th>Level</th><th>Ý nghĩa</th><th>Cách dùng</th></tr></thead><tbody><tr><td><span class="tag" style="background:#3a3326;color:#e8cfa3">Tier 1</span></td><td style="color:#f1f2f4;font-weight:600">Weekly VAH / VAL / POC</td><td>Value của tuần, bias khung lớn</td><td>Giá trong weekly VA → balance, ưu tiên rotation. Open ngoài weekly VA → ưu tiên go-with</td></tr><tr><td><span class="tag" style="background:#3a3326;color:#e8cfa3">Tier 1</span></td><td style="color:#f1f2f4;font-weight:600">Composite VA (nhiều ngày)</td><td>Fair value bền nhiều ngày</td><td>Cạnh composite là zone fade mạnh nhất; phá và accept → trend nhiều ngày</td></tr><tr><td><span class="tag" style="background:#3a3326;color:#e8cfa3">Tier 1</span></td><td style="color:#f1f2f4;font-weight:600">Naked POC nhiều ngày</td><td>Fair value cũ chưa test</td><td>Target ưu tiên; lần chạm đầu hay phản ứng</td></tr><tr><td><span class="tag" style="background:#20252e;color:#e6e8eb">Tier 2</span></td><td style="color:#f1f2f4;font-weight:600">PD VAH / PD VAL</td><td>Cạnh fair value hôm qua</td><td>Fade nếu reject; go-with nếu accept; 80% rule khi quay lại vào VA</td></tr><tr><td><span class="tag" style="background:#20252e;color:#e6e8eb">Tier 2</span></td><td style="color:#f1f2f4;font-weight:600">PD POC</td><td>Giá công bằng nhất hôm qua</td><td>Target của rotation trong VA, pivot bias</td></tr><tr><td><span class="tag" style="background:#20252e;color:#e6e8eb">Tier 2</span></td><td style="color:#f1f2f4;font-weight:600">Poor high / poor low</td><td>Unfinished auction</td><td>Magnet / target, không đặt stop ngay sau</td></tr><tr><td><span class="tag" style="background:#20252e;color:#e6e8eb">Tier 2</span></td><td style="color:#f1f2f4;font-weight:600">Single prints / RTH gap</td><td>Vùng imbalance</td><td>Support / resistance lần test đầu; lấp hết = hết tác dụng</td></tr><tr><td><span class="tag" style="background:#1a1e25;color:#aeb6c0">Tier 3</span></td><td style="color:#f1f2f4;font-weight:600">IB High / IB Low</td><td>Biên range extension</td><td>IB hẹp → breakout go-with; IB rộng → fade cạnh IB</td></tr><tr><td><span class="tag" style="background:#1a1e25;color:#aeb6c0">Tier 3</span></td><td style="color:#f1f2f4;font-weight:600">VWAP RTH ± SD</td><td>Value động của phiên</td><td>Confluence, xem chương 05</td></tr></tbody></table></div>
+    <button class="btn sm ghost" type="button" style="align-self:flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg> Hiện Tier 4 · scalping</button>
+  </section>
+
+  <section id="acceptance" style="display:flex;flex-direction:column;gap:14px">
+    <h2 class="h2" style="font-size:22px">2 · Acceptance hay rejection?</h2>
+    <div class="card" style="gap:0;padding:6px 20px 8px"><div style="display:grid;grid-template-columns:110px minmax(0,1fr) minmax(0,1fr);column-gap:18px">
+      <span class="lbl" style="padding:12px 0">Dấu hiệu</span><span class="lbl long" style="padding:12px 0">Acceptance</span><span class="lbl short" style="padding:12px 0">Rejection</span><div style="display:contents"><span class="small dim" style="padding:12px 0;border-top:1px solid #1f242c;font-weight:600">Thời gian</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Giá ở ngoài level ≥ 2 period TPO (60 phút) hoặc xây TPO dày ở đó</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Chỉ 1 period chạm rồi quay lại, để lại tail</span></div><div style="display:contents"><span class="small dim" style="padding:12px 0;border-top:1px solid #1f242c;font-weight:600">Volume</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Volume profile dày lên ngoài level</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Volume mỏng, single prints</span></div><div style="display:contents"><span class="small dim" style="padding:12px 0;border-top:1px solid #1f242c;font-weight:600">VWAP RTH</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">VWAP dốc theo hướng phá, giá giữ phía đó</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Giá chạm ±2 SD rồi quay về VWAP</span></div><div style="display:contents"><span class="small dim" style="padding:12px 0;border-top:1px solid #1f242c;font-weight:600">CVD</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">CVD tạo đỉnh / đáy mới cùng giá</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">CVD divergence ngay tại level</span></div><div style="display:contents"><span class="small dim" style="padding:12px 0;border-top:1px solid #1f242c;font-weight:600">Kết luận</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Go-with: level cũ thành support / resistance</span><span class="small t2" style="padding:12px 0;border-top:1px solid #1f242c;line-height:1.5">Fade về POC / cạnh VA đối diện</span></div>
+    </div></div>
+    <div style="display:flex;gap:14px;padding:16px 18px;border-radius:12px;background:#1e1c17;border:1px solid #3a3326"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d4b483" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><p class="t2" style="font-size:14.5px;line-height:1.65"><b style="color:#e8cfa3">Bản nhanh cho NY AM:</b> trong 2 tiếng khó chờ đủ 2 period. Dùng 1 period (30 phút) đóng ngoài level + VWAP + CVD cùng xác nhận.</p></div>
+  </section>
+
+  <section id="rule-80" style="display:flex;flex-direction:column;gap:14px">
+    <h2 class="h2" style="font-size:22px">3 · 80% rule</h2>
+    <p style="font-size:16px;line-height:1.75;color:#c9ced5">Open (hoặc đi) ra ngoài VA hôm qua, quay lại vào trong và được chấp nhận 2 period TPO liên tiếp → xác suất cao đi hết VA sang cạnh còn lại.</p>
+    <div style="display:flex;gap:14px;padding:16px 18px;border-radius:12px;background:#281d1a;border:1px solid #4a2f28"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e0947c" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l9.5 17h-19z"/><path d="M12 10v4.5M12 17.5v.5"/></svg><p class="t2" style="font-size:14.5px;line-height:1.65">“80%” là tên gọi truyền thống, không phải thống kê đã kiểm chứng cho NQ hiện tại. Hãy tự đo trên Market Replay.</p></div>
+  </section>
+
+  <section id="cham-diem" style="display:flex;flex-direction:column;gap:14px">
+    <h2 class="h2" style="font-size:22px">4 · Chấm điểm một level trước khi trade</h2>
+    <div class="card" style="gap:0;padding:8px 20px"><div class="ch" style="padding:10px 0;border-top:1px solid #1f242c"><span class="small t2">Tier 1 (weekly VA, composite, nPOC nhiều ngày)</span><span class="mono" style="font-weight:700;color:#8cc2a4">+3</span></div><div class="ch" style="padding:10px 0;border-top:1px solid #1f242c"><span class="small t2">Tier 2 (VAH / VAL / POC hôm qua, poor H/L, single prints)</span><span class="mono" style="font-weight:700;color:#8cc2a4">+2</span></div><div class="ch" style="padding:10px 0;border-top:1px solid #1f242c"><span class="small t2">Trùng ≥ 2 level trong vòng 10–15 điểm NQ</span><span class="mono" style="font-weight:700;color:#8cc2a4">+2</span></div><div class="ch" style="padding:10px 0;border-top:1px solid #1f242c"><span class="small t2">Trùng VWAP RTH hoặc band ±2 SD</span><span class="mono" style="font-weight:700;color:#8cc2a4">+2</span></div><div class="ch" style="padding:10px 0;border-top:1px solid #1f242c"><span class="small t2">Chưa được test trong phiên hiện tại (fresh)</span><span class="mono" style="font-weight:700;color:#8cc2a4">+1</span></div><div class="ch" style="padding:10px 0;border-top:1px solid #1f242c"><span class="small t2">Đã bị xuyên qua và accept hôm nay</span><span class="mono" style="font-weight:700;color:#e0947c">−3</span></div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+      <div style="padding:14px;border-radius:12px;background:#17231d;border:1px solid #2b4537"><span class="mono long" style="font-size:18px;font-weight:700">≥ 6</span><p class="small t2" style="margin-top:6px">Zone A, được trade</p></div>
+      <div style="padding:14px;border-radius:12px;background:#1e1c17;border:1px solid #3a3326"><span class="mono acc" style="font-size:18px;font-weight:700">4–5</span><p class="small t2" style="margin-top:6px">Chỉ trade khi CVD + trigger rõ</p></div>
+      <div style="padding:14px;border-radius:12px;background:#1a1e25;border:1px solid #2e3540"><span class="mono dim" style="font-size:18px;font-weight:700">≤ 3</span><p class="small t2" style="margin-top:6px">Không trade, chỉ làm target</p></div>
+    </div>
+  </section>
+
+  <section class="card" style="gap:14px;padding:22px" aria-label="Kiểm tra nhanh">
+    <div class="ch"><span class="lbl" style="display:flex;gap:8px;align-items:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#d4b483" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17v.5"/></svg> Kiểm tra nhanh · 1 / 5</span><span class="small dim">Câu từ ngân hàng TPO</span></div>
+    <p style="font-size:15.5px;font-weight:600;line-height:1.5;color:#f1f2f4">PD VAL chưa được test trong phiên, không trùng level hay VWAP nào khác. Zone này được bao nhiêu điểm và dùng thế nào?</p>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button type="button" style="text-align:left;padding:12px 14px;border-radius:10px;border:1px solid #2b4537;background:#17231d;color:#e6f2ea;font:14px Inter,system-ui,sans-serif;cursor:pointer;display:flex;justify-content:space-between">A · 3 điểm (Tier 2 +2, fresh +1) · chỉ làm target <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8cc2a4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg></button>
+      <button type="button" style="text-align:left;padding:12px 14px;border-radius:10px;border:1px solid #2e3540;background:#12151a;color:#c9ced5;font:14px Inter,system-ui,sans-serif;cursor:pointer">B · 5 điểm · trade khi có CVD + trigger</button>
+      <button type="button" style="text-align:left;padding:12px 14px;border-radius:10px;border:1px solid #2e3540;background:#12151a;color:#c9ced5;font:14px Inter,system-ui,sans-serif;cursor:pointer">C · 6 điểm · zone A, được trade</button>
+    </div>
+  </section>
+
+  <nav style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border-top:1px solid #1f242c;padding-top:20px" aria-label="Chương trước và sau">
+    <a href="#" class="card" style="gap:4px;color:#e6e8eb"><span class="small dim"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg> Chương 03</span><span class="h3">Initial Balance</span></a>
+    <a href="#" class="card" style="gap:4px;color:#e6e8eb;text-align:right;align-items:flex-end"><span class="small dim">Chương 05 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span><span class="h3">VWAP RTH</span></a>
+  </nav>
+</article><aside style="display:flex;flex-direction:column;gap:16px">
+  <section class="card" style="gap:4px;padding:16px"><span class="lbl" style="padding-bottom:8px">Trong chương</span>
+    <a href="#thu-bac" style="padding:6px 10px;border-radius:8px;color:#f1f2f4;background:#1a1e25;font-size:13px">1 · Thứ bậc level</a>
+    <a href="#acceptance" style="padding:6px 10px;color:#aeb6c0;font-size:13px">2 · Acceptance / rejection</a>
+    <a href="#rule-80" style="padding:6px 10px;color:#aeb6c0;font-size:13px">3 · 80% rule</a>
+    <a href="#cham-diem" style="padding:6px 10px;color:#aeb6c0;font-size:13px">4 · Chấm điểm level</a>
+  </section>
+  <section class="card" style="gap:10px;padding:16px"><span class="lbl">Thuật ngữ trong bài</span><div style="display:flex;flex-wrap:wrap;gap:6px"><button class="chip" type="button" style="min-height:28px">VAH / VAL</button><button class="chip" type="button" style="min-height:28px">nPOC</button><button class="chip" type="button" style="min-height:28px">Poor high</button><button class="chip" type="button" style="min-height:28px">Single prints</button><button class="chip" type="button" style="min-height:28px">IB</button><button class="chip" type="button" style="min-height:28px">Acceptance</button></div></section>
+  <section class="card" style="gap:10px;padding:16px"><span class="lbl">Ghi chú của bạn</span><textarea aria-label="Ghi chú" rows="4" style="width:100%;padding:10px;border-radius:9px;border:1px solid #5e6774;background:#12151a;color:#e6e8eb;font:13px/1.5 Inter,system-ui,sans-serif;resize:vertical">Composite VA = HVN trong plan.</textarea></section>
+  <button class="btn" type="button"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg> Đánh dấu đã học</button>
+</aside></div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
